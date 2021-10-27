@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "clReflect_automation": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Voxel_Doom3_From_Scratch\\Doom3\\Doom3.vcxproj Release x64"
+    }
+  }
+}
