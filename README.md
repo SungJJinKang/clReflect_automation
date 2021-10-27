@@ -1,6 +1,6 @@
 # clReflect_VisualStudio
 
-This library support using [clReflect](https://github.com/Celtoys/clReflect) with Visual Studio            
+This library support using [clReflect](https://github.com/Celtoys/clReflect) with Project Build File         
 
 1. Analyze Project Build file ( CMakeLists.txt, *.vcxproj.... ) ( to find compile options. ex ) AdditionalIncludeDirectories.... )
 2. Parse All Project source files ( *.cpp ) to Type info database file ( *.csv ) using clReflect ( stored at Project Build Folder )
