@@ -8,7 +8,7 @@ namespace clReflect_automation
 {
     class ParseSourceFileDirectories
     {
-        public static string GetSourceFileDirectories()
+        public static string[] GetSourceFileDirectories(in int count)
         {
             Console.WriteLine("Detecting SourceFile Directories..");
 
@@ -18,22 +18,34 @@ namespace clReflect_automation
 
             Console.WriteLine("SourceFile Directories List : ");
 
-            var sb = new System.Text.StringBuilder();
-
-            foreach (Match SourceFileDirectories_match in SourceFileDirectories_matches)
+            System.Text.StringBuilder[] sb = new System.Text.StringBuilder[count];
+            for(int i = 0; i < count; i++)
             {
-                string sourceFileDirectory = SourceFileDirectories_match.Groups[1].ToString();
+                sb[i] = new System.Text.StringBuilder();
+            }
+
+            for (int i = 0; i < SourceFileDirectories_matches.Count; i++)
+            {
+                string sourceFileDirectory = SourceFileDirectories_matches[i].Groups[1].ToString();
                 sourceFileDirectory = sourceFileDirectory.Trim();
                 sourceFileDirectory.Replace("\n", "");
 
                 Console.WriteLine(sourceFileDirectory);
-                sb.Append(DirectoryHelper.ConvertPathMacros("$(SolutionDir)"));
-                sb.Append('\\');
-                sb.Append(sourceFileDirectory);
-                sb.Append(' ');
+
+                int sbIndex = i % count;
+
+                sb[sbIndex].Append(DirectoryHelper.ConvertPathMacros("$(SolutionDir)"));
+                sb[sbIndex].Append('\\');
+                sb[sbIndex].Append(sourceFileDirectory);
+                sb[sbIndex].Append(' ');
             }
 
-            return sb.ToString();
+            string[] sourceFileDirectories = new string[count];
+            for(int i = 0; i < count; i++)
+            {
+                sourceFileDirectories[i] = sb[i].ToString();
+            }
+            return sourceFileDirectories;
         }
     }
 }
