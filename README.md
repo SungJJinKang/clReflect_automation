@@ -11,10 +11,13 @@ This library support using [clReflect](https://github.com/Celtoys/clReflect) wit
 
 ## How To Use
 
+```
 clReflect_automation.exe [clscan.exe Path] [clexport.exe Path] [Project Folder ( including CMakeLists.txt, *.vcxproj... )]  [Compile Configuration] [Compile Platform] [Additional Compiler Command Lines ( optional )]                
+```
 
-
+```
 ex) clReflect_automation.exe C:\Users\hour3\Downloads\clReflect-SDK-v0.5.11\bin\clscan.exe C:\Users\hour3\Downloads\clReflect-SDK-v0.5.11\bin\clexport.exe C:\Voxel_Doom3_From_Scratch\Doom3\Doom3.vcxproj Release x64 -std=c++17
+```
 
 ## Roadmap
 
