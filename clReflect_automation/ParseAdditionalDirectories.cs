@@ -18,13 +18,22 @@ namespace clReflect_automation
             Regex AdditionalPath_rgx = new Regex(AdditionalPath_MacrosDetection_pattern, RegexOptions.Singleline);
             Match AdditionalPath_match = AdditionalPath_rgx.Match(path);
 
-            return AdditionalPath_match.Result(DirectoryHelper.ConvertPathMacros(AdditionalPath_match.Groups[0].ToString()));
+            if(AdditionalPath_match.Captures.Count == 0)
+            {
+                return path;
+            }
+            else
+            {
+                string parsedAdditionalPath = path.Replace(AdditionalPath_match.Captures[0].ToString(), DirectoryHelper.ConvertPathMacros(AdditionalPath_match.Groups[0].ToString()) + '\\');
+                return parsedAdditionalPath;
+            }
+          
         }
 
         public static string GetAdditionalPaths()
         {
 
-            Debug.WriteLine("Detecting Additional Directories..");
+            Console.WriteLine("Detecting Additional Directories..");
 
             string ItemDefinitionGroup_pattern = @"<ItemDefinitionGroup(.*?)<\/ItemDefinitionGroup>";
             Regex ItemDefinitionGroup_rgx = new Regex(ItemDefinitionGroup_pattern, RegexOptions.Singleline);
@@ -35,14 +44,18 @@ namespace clReflect_automation
             string configuration_platform_patterns = @"\'\$\(Configuration\)\|\$\(Platform\)'=='(.*?)\|(.*?)'";
             Regex configuration_platform_rgx = new Regex(configuration_platform_patterns, RegexOptions.Singleline);
 
-            bool isSuccessToParse = false;
+            bool isSuccessToFindValidConfigurationAndPlatform = false;
 
             string resultStr = "";
 
             foreach (var itemDefinition in ItemDefinitionGroup_matches)
             {
                 MatchCollection configuration_platform_matches = configuration_platform_rgx.Matches(itemDefinition.ToString());
-                Debug.Assert(configuration_platform_matches[0].Groups.Count == 3, "configuration_platform_matches fail");
+                
+                if (configuration_platform_matches[0].Groups.Count != 3)
+                {
+                    throw new Exception("Fail To Parse Configuration, Platform");
+                }
 
                 if (
                     configuration_platform_matches[0].Groups[1].ToString() == Program.TARGET_CONFIGURATION
@@ -50,20 +63,36 @@ namespace clReflect_automation
                     configuration_platform_matches[0].Groups[2].ToString() == Program.TARGET_PATFORM
                 )
                 {
+                    isSuccessToFindValidConfigurationAndPlatform = true;
+
                     string AdditionalPaths_patterns = @"<AdditionalIncludeDirectories>(.*?)<\/AdditionalIncludeDirectories>";
                     Regex AdditionalPaths_rgx = new Regex(AdditionalPaths_patterns, RegexOptions.Singleline);
                     MatchCollection AdditionalPaths_matches = AdditionalPaths_rgx.Matches(itemDefinition.ToString());
 
-                    Debug.Assert(AdditionalPaths_matches.Count == 1);
+                    if(AdditionalPaths_matches.Count != 1)
+                    {
+                        throw new Exception("Fail To Parse Addtional Paths");
+                    }
 
                     var sb = new System.Text.StringBuilder();
 
-                    string[] additionalPathList = AdditionalPaths_matches[0].Groups[1].ToString().Split(';');
+                    string additionalPaths = AdditionalPaths_matches[0].Groups[1].ToString();
+                    additionalPaths = additionalPaths.Trim();
+                    additionalPaths.Replace("\n", "");
+
+                    string[] additionalPathList = additionalPaths.Split(';');
                     foreach (string addtionalPath in additionalPathList)
                     {
-                        sb.Append("-I\"");
-                        sb.Append(ParseAdditionalPath(addtionalPath));
-                        sb.Append("\" ");
+                        if (addtionalPath != "")
+                        {
+                            sb.Append("-I\"");
+                            string parsedAdditionalPath = ParseAdditionalPath(addtionalPath);
+                            sb.Append(parsedAdditionalPath);
+                            sb.Append("\" ");
+
+                            Console.WriteLine(parsedAdditionalPath);
+                        }
+                        
                     }
 
                     resultStr = sb.ToString();
@@ -71,6 +100,10 @@ namespace clReflect_automation
 
             }
 
+            if(isSuccessToFindValidConfigurationAndPlatform == false)
+            {
+                throw new Exception(String.Format("Fail to Find Correct Configuration ( {0} ) And Platform ( {1} )", Program.TARGET_CONFIGURATION, Program.TARGET_PATFORM));
+            }
 
             return resultStr;
         }

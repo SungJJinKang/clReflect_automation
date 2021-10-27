@@ -42,11 +42,14 @@ namespace clReflect_automation
                     break;
 
                 default:
-                    Debug.Assert(false, "Fail To Find Directory Macros ( {0} )", macros);
-                    break;
+
+                    throw new Exception(String.Format("Fail To Find Directory Macros ( {0} )", macros));
             }
 
-            Debug.Assert(targetString != "");
+            if(targetString == "")
+            {
+                throw new Exception(String.Format("Fail to Parse Direcotory Macros ( {0} )", macros));
+            }
 
             return targetString;
 
