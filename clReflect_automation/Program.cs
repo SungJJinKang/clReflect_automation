@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace clReflect_automation
 {
@@ -87,6 +88,9 @@ namespace clReflect_automation
             }
 
             process.WaitForExit();
+
+            ChildProcessTracker.AddProcess(process);
+
             int result = process.ExitCode;
             if(result != 0)
             {
@@ -125,6 +129,9 @@ namespace clReflect_automation
             }
 
             process.WaitForExit();
+
+            ChildProcessTracker.AddProcess(process);
+
             int result = process.ExitCode;
             if (result != 0)
             {
@@ -134,7 +141,7 @@ namespace clReflect_automation
 
         }
 
-        struct clScanParameter
+        public struct clScanParameter
         {
 
             public string sourceFiles;
@@ -143,11 +150,9 @@ namespace clReflect_automation
 
         }
 
-        public static void clScan(object __clScanParameter)
+        public static Process clScan_internal(clScanParameter _clScanParameter)
         {
             Process process = new Process();
-
-            clScanParameter _clScanParameter = (clScanParameter)__clScanParameter;
 
             // Stop the process from opening a new window
             process.StartInfo.RedirectStandardOutput = true;
@@ -173,45 +178,48 @@ namespace clReflect_automation
             Console.WriteLine("Start to clScan");
 
             bool isProcessStarted = process.Start();
-            if(isProcessStarted == false)
+
+            ChildProcessTracker.AddProcess(process);
+
+
+            if (isProcessStarted == false)
             {
                 throw new Exception(String.Format("Fail to start clScan ( File Path : {0} )", process.StartInfo.FileName));
             }
 
-            process.WaitForExit();
 
-            int result = process.ExitCode;
-            if (result != 0)
-            {
-                throw new Exception(String.Format("Fail to start clScan ( File Path : {0} ) - indexNum : {1}", process.StartInfo.FileName, _clScanParameter.index.ToString()));
-            }
+            return process;
 
-            Console.WriteLine("clScan is finished ( {0} )", GetclScanOutputPath(_clScanParameter.index));
+         
         }
 
-        private static void clScanMultiThread(in string[] sourceFiles, in string additionalDirectories)
+        private static void clScanMultiProcess(in string[] sourceFiles, in string additionalDirectories)
         {
-            Thread[] t = new Thread[sourceFiles.Length];
+            Process[] t = new Process[sourceFiles.Length];
 
             for (int i = 0; i < sourceFiles.Length; i++)
             {
-                string[] param = { "Param", "Good" }; 
-                t[i] = new Thread(new ParameterizedThreadStart(clScan));
                 clScanParameter _clScanParameter = new clScanParameter();
                 _clScanParameter.sourceFiles = sourceFiles[i];
                 _clScanParameter.additionalDirectories = additionalDirectories;
                 _clScanParameter.index = i;
 
-                t[i].Start(_clScanParameter);
+                t[i] = clScan_internal(_clScanParameter);
             }
 
             for (int i = 0; i < sourceFiles.Length; i++)
             {
-                t[i].Join();
+                t[i].WaitForExit();
+
+                int result = t[i].ExitCode;
+                if (result != 0)
+                {
+                    throw new Exception(String.Format("Fail to start clScan ( File Path : {0} ) - indexNum : {1}", t[i].StartInfo.FileName, i));
+                }
+
+                Console.WriteLine("clScan is finished ( {0} )", i);
             }
         }
-
-
 
 
 
@@ -239,7 +247,7 @@ namespace clReflect_automation
             string[] SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories(DEFAULT_THREAD_COUNT);
             string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
 
-            clScanMultiThread(SourceFileDirectories, additionalDirectories);
+            clScanMultiProcess(SourceFileDirectories, additionalDirectories);
             clMerge(SourceFileDirectories.Length);
 
             clExport();
