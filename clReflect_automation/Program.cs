@@ -88,13 +88,16 @@ namespace clReflect_automation
             }
             ChildProcessTracker.AddProcess(process);
 
-            while (process.HasExited == false)
+            while (process.StandardOutput.EndOfStream == false)
             {
-                if (process.StandardOutput.EndOfStream == false)
-                {
-                    string line = process.StandardOutput.ReadLine();
+                string line = process.StandardOutput.ReadLine();
 
+                Console.WriteLine("clMerge Log : {0}", line);
+
+                if(process.HasExited == true)
+                {
                     Console.WriteLine("clMerge Log : {0}", line);
+                    break;
                 }
             }
 
@@ -139,13 +142,16 @@ namespace clReflect_automation
             }
             ChildProcessTracker.AddProcess(process);
 
-            while (process.HasExited == false)
+            while (process.StandardOutput.EndOfStream == false)
             {
-                if (process.StandardOutput.EndOfStream == false)
-                {
-                    string line = process.StandardOutput.ReadLine();
+                string line = process.StandardOutput.ReadLine();
 
+                Console.WriteLine("clExport Log ( Target Database File Path : {0} ) : {1}", GetclMergeOutputPath(), line);
+
+                if (process.HasExited == true)
+                {
                     Console.WriteLine("clExport Log ( Target Database File Path : {0} ) : {1}", GetclMergeOutputPath(), line);
+                    break;
                 }
             }
 
@@ -201,14 +207,18 @@ namespace clReflect_automation
                 throw new Exception(String.Format("Fail to start clScan ( exScan.exe FilePath: {0} )", process.StartInfo.FileName));
             }
             ChildProcessTracker.AddProcess(process);
+            
 
-            while (process.HasExited == false)
+            while (process.StandardOutput.EndOfStream == false)
             {
-                if(process.StandardOutput.EndOfStream == false)
-                {
-                    string line = process.StandardOutput.ReadLine();
+                string line = process.StandardOutput.ReadLine();
 
+                Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
+
+                if (process.HasExited == true)
+                {
                     Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
+                    break;
                 }
             }
 
