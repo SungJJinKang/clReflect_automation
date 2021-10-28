@@ -24,6 +24,8 @@ namespace clReflect_automation
 
         private const int DEFAULT_THREAD_COUNT = 4;
 
+        
+
         private static string GetclMergeOutputPath()
         {
             var sb = new System.Text.StringBuilder();
@@ -31,6 +33,10 @@ namespace clReflect_automation
             sb.Append('\\');
             sb.Append(DEFAULT_CL_SCAN_OUT_FILE_NAME);
             sb.Append("_merged");
+            sb.Append("_");
+            sb.Append(TARGET_CONFIGURATION);
+            sb.Append("_");
+            sb.Append(TARGET_PATFORM);
             sb.Append(".csv");
             return sb.ToString();
         }
@@ -41,6 +47,10 @@ namespace clReflect_automation
             sb.Append(Path.GetDirectoryName(path));
             sb.Append('\\');
             sb.Append(Path.GetFileNameWithoutExtension(path));
+            sb.Append("_");
+            sb.Append(TARGET_CONFIGURATION);
+            sb.Append("_");
+            sb.Append(TARGET_PATFORM);
             sb.Append(".csv");
             return sb.ToString();
         }
@@ -51,6 +61,10 @@ namespace clReflect_automation
             sb.Append(Path.GetDirectoryName(VCXPROJ_FILE_PATH));
             sb.Append('\\');
             sb.Append(DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append("_");
+            sb.Append(TARGET_CONFIGURATION);
+            sb.Append("_");
+            sb.Append(TARGET_PATFORM);
             sb.Append(".cppbin");
             return sb.ToString();
         }
