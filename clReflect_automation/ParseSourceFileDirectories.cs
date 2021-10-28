@@ -8,7 +8,7 @@ namespace clReflect_automation
 {
     class ParseSourceFileDirectories
     {
-        public static string[] GetSourceFileDirectories(in int count)
+        public static List<string> GetSourceFileDirectories(in int count)
         {
             Console.WriteLine("Detecting SourceFile Directories..");
 
@@ -18,11 +18,9 @@ namespace clReflect_automation
 
             Console.WriteLine("SourceFile Directories List : ");
 
-            System.Text.StringBuilder[] sb = new System.Text.StringBuilder[count];
-            for(int i = 0; i < count; i++)
-            {
-                sb[i] = new System.Text.StringBuilder();
-            }
+            List<string> sourceFileList = new List<string>();
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
             for (int i = 0; i < SourceFileDirectories_matches.Count; i++)
             {
@@ -32,20 +30,16 @@ namespace clReflect_automation
 
                 Console.WriteLine(sourceFileDirectory);
 
-                int sbIndex = i % count;
+                sb.Append(DirectoryHelper.ConvertPathMacros("$(SolutionDir)"));
+                sb.Append('\\');
+                sb.Append(sourceFileDirectory);
 
-                sb[sbIndex].Append(DirectoryHelper.ConvertPathMacros("$(SolutionDir)"));
-                sb[sbIndex].Append('\\');
-                sb[sbIndex].Append(sourceFileDirectory);
-                sb[sbIndex].Append(' ');
+                sourceFileList.Add(sb.ToString());
+
+                sb.Clear();
             }
 
-            string[] sourceFileDirectories = new string[count];
-            for(int i = 0; i < count; i++)
-            {
-                sourceFileDirectories[i] = sb[i].ToString();
-            }
-            return sourceFileDirectories;
+            return sourceFileList;
         }
     }
 }
