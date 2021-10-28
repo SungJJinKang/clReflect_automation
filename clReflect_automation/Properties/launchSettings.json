@@ -2,7 +2,7 @@
   "profiles": {
     "clReflect_automation": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\kmsjk\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clscan.exe C:\\Users\\kmsjk\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clmerge.exe C:\\Users\\kmsjk\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clexport.exe C:\\Users\\kmsjk\\source\\repos\\Project7\\Project7.vcxproj Release x64 -std=c++17 -O2 -ffp-model=precise -D\"NDEBUG\" -D\"_CONSOLE\" -D\"_UNICODE\" -D\"UNICODE\" -D\"DOOM_DLL_EXPORTS\" -GR- -Gr -march=native -m64 -W0"
+      "commandLineArgs": "C:\\Users\\hour3\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clscan.exe C:\\Users\\hour3\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clmerge.exe C:\\Users\\hour3\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clexport.exe C:\\Users\\hour3\\source\\repos\\Project2\\Project2\\Project2.vcxproj Debug x64 -std=c++17 -ffp-model=precise -D\"DEBUG\" -D\"_CONSOLE\" -D\"_UNICODE\" -D\"UNICODE\" -D\"DOOM_DLL_EXPORTS\" -march=native -W3 -MDd -O0 -v  -m64 -D__LP64__ -D_WIN64"
     }
   }
 }

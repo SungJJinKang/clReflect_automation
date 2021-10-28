@@ -18,7 +18,7 @@ namespace clReflect_automation
         public static string CL_EXPORT_FILE_PATH;
         public static string CL_MERGE_FILE_PATH;
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w";
+        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -v";
         public static string ADDITIONAL_COMPILER_OPTION = "";
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
@@ -279,13 +279,25 @@ namespace clReflect_automation
 
         static void Main(string[] args)
         {
-            Program.CL_SCAN_FILE_PATH = args[0];
-            Program.CL_MERGE_FILE_PATH = args[1];
-            Program.CL_EXPORT_FILE_PATH = args[2];
+            Program.CL_SCAN_FILE_PATH = args[0].Trim();
+            Program.CL_MERGE_FILE_PATH = args[1].Trim();
+            Program.CL_EXPORT_FILE_PATH = args[2].Trim();
 
-            Program.VCXPROJ_FILE_PATH = args[3];
-            Program.TARGET_CONFIGURATION = args[4];
-            Program.TARGET_PATFORM = args[5];
+            Program.VCXPROJ_FILE_PATH = args[3].Trim();
+            Program.TARGET_CONFIGURATION = args[4].Trim();
+            Program.TARGET_PATFORM = args[5].Trim();
+
+            if(Program.TARGET_PATFORM == "x64")
+            {
+               
+                Program.ADDITIONAL_COMPILER_OPTION += @"-D""_WIN64"" ";
+                Program.ADDITIONAL_COMPILER_OPTION += @"-D""__LP64__"" ";
+                Program.ADDITIONAL_COMPILER_OPTION += @"-m64 ";
+            }
+            else
+            {
+                Program.ADDITIONAL_COMPILER_OPTION += "-m32 ";
+            }
 
             for (int i = 6; i < args.Length; i++)
             {
