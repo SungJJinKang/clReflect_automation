@@ -36,6 +36,12 @@ namespace clReflect_automation
                     break;
 
                 case "$(SolutionDir)":
+                    //TODO : SolutionDirectory ( .sln direcoty ) can be different with ProjectDir ( .vcxproj ) 
+                    targetString = Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH);
+
+                    break;
+
+                case "$(ProjectDir)":
 
                     targetString = Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH);
 
