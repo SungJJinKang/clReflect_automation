@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lQNBX8jcybem84cZl6VU9yRKKrk06TM0iGZeE3xegfYCYAqFwOYkoinFZ0R0JdMAzvVK9rut2MgIp/pAIRcbJQ==",
+  "dgSpecHash": "Y9RlOnOIRpL2E0iex9/XRG/meZOVWGJ2UUSXhEmrtmxtXNgfCij6++bBxHEjxj79o/h2kKwJm3MvFSHY+vfbKg==",
   "success": true,
-  "projectFilePath": "C:\\clReflect_VisualStudio\\clReflect_automation\\clReflect_automation.csproj",
+  "projectFilePath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

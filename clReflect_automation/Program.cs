@@ -18,7 +18,7 @@ namespace clReflect_automation
         public static string CL_EXPORT_FILE_PATH;
         public static string CL_MERGE_FILE_PATH;
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -v";
+        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__";
         public static string ADDITIONAL_COMPILER_OPTION = "";
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 

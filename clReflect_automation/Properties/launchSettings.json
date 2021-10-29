@@ -2,7 +2,7 @@
   "profiles": {
     "clReflect_automation": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\kmsjk\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clscan.exe C:\\Users\\kmsjk\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clmerge.exe C:\\Users\\kmsjk\\Downloads\\clReflect-SDK-v0.5.11\\bin\\clexport.exe C:\\Users\\kmsjk\\source\\repos\\Project7\\Project7.vcxproj Debug x64 -fms-extensions -fms-compatibility -fms-compatibility-version=19 -GS -W3 -O0 -ffp-model=precise -D_DEBUG -D_CONSOLE -D\"_UNICODE\" -D\"UNICODE\" -WX- -std=c++17 -Gd -MDd -std=c++17 -diagnostics:column -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++17 -m64"
+      "commandLineArgs": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect\\bin\\clscan.exe C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect\\bin\\clmerge.exe C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect\\bin\\clexport.exe C:\\Doom3FromScratch\\Doom3\\Doom3.vcxproj Release x64 -fms-extensions -fms-compatibility -fms-compatibility-version=19 -GS -O2 -ffp-model=precise -D_DEBUG -D_CONSOLE -D\"_UNICODE\" -D\"UNICODE\" -std=c++17 -Gd -MDd -std=c++17 -diagnostics:column -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++17 -m64 -fdelayed-template-parsing -w -mavx2"
     }
   }
 }

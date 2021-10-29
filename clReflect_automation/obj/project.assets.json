@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\clReflect_VisualStudio\\clReflect_automation\\clReflect_automation.csproj",
+      "projectUniqueName": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
       "projectName": "clReflect_automation",
-      "projectPath": "C:\\clReflect_VisualStudio\\clReflect_automation\\clReflect_automation.csproj",
+      "projectPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
       "packagesPath": "C:\\Users\\kmsjk\\.nuget\\packages\\",
-      "outputPath": "C:\\clReflect_VisualStudio\\clReflect_automation\\obj\\",
+      "outputPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\kmsjk\\AppData\\Roaming\\NuGet\\NuGet.Config",
