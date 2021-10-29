@@ -142,7 +142,7 @@ namespace clReflect_automation
             var sb = new System.Text.StringBuilder();
             sb.Append(GetclMergeOutputPath());
             sb.Append(" -cpp ");
-            sb.Append(GetclExportOutputPath());
+            sb.Append(GetclExportOutputPath()); 
 
             process.StartInfo.Arguments = sb.ToString();
 
