@@ -9,7 +9,7 @@ This library support using [clReflect](https://github.com/SungJJinKang/clReflect
 
 ## Current Feature
 
-- Support parsing Visual Studio Project File ( *.vcxproj )
+- Support parsing Visual Studio Project File ( *.vcxproj ) - "Parse Additional Include Directories", "Add target compiler option"
 
 ## How To Use
 
