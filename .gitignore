@@ -386,3 +386,10 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+*.v2
+*.suo
+*.json
+*.cache
+
+!clReflect
