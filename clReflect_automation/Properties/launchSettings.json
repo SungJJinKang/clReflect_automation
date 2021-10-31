@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "clReflect_automation": {
-      "commandName": "Project",
-      "nativeDebugging": false
-    }
-  }
-}

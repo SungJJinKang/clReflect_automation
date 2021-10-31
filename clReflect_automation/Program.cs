@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace clReflect_automation
 {
@@ -19,7 +18,7 @@ namespace clReflect_automation
         public static string CL_EXPORT_FILE_PATH;
         public static string CL_MERGE_FILE_PATH;
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
+        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
         public static string ADDITIONAL_COMPILER_OPTION = "";
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
@@ -55,49 +54,117 @@ namespace clReflect_automation
             Program.VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(Program.VCXPROJ_FILE_PATH);
         }
 
-
-        static private void Generate_clReflect_data(string[] args)
+        static private bool isInitialized = false;
+        static private void InitializeProgram()
         {
-            if (args.Length == 0 || args[0].Trim() == "")
+            if(isInitialized == false)
             {
-                string setting_text_direcotry = Directory.GetCurrentDirectory() + "\\" + DEFAULT_SETTING_TEXT_FILENAME;
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
-                string setting_text_string = System.IO.File.ReadAllText(setting_text_direcotry);
-                string[] setting_text_args = setting_text_string.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                Configure(setting_text_args);
+                AppDomain.CurrentDomain.UnhandledException +=
+                    (object sender, UnhandledExceptionEventArgs e)
+                    => MessageBox.Show($"UnhandledException");
+
+                Application.ThreadException +=
+                    (object sender, ThreadExceptionEventArgs e)
+                    => MessageBox.Show($"ThreadException: {e?.Exception?.Message}");
             }
-            else
-            {
-                Configure(args);
-            }
-
-            List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories();
-            string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
-
-            List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);
-            clReflectCaller.clMerge(clScanOutFilePaths);
-            ExportDatabaseDirectoryList.WriteDatabasePathsListToText(clScanOutFilePaths);
-
-            clReflectCaller.clExport();
         }
+
+
+        static private int Generate_clReflect_data(string[] args)
+        {
+            InitializeProgram();
+
+            try
+            {
+                if (args.Length == 0 || args[0].Trim() == "")
+                {
+                    string setting_text_direcotry = Directory.GetCurrentDirectory() + "\\" + DEFAULT_SETTING_TEXT_FILENAME;
+
+                    string setting_text_string = System.IO.File.ReadAllText(setting_text_direcotry);
+                    string[] setting_text_args = setting_text_string.Split(' ');
+                    Configure(setting_text_args);
+                }
+                else
+                {
+                    Configure(args);
+                }
+
+                List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories();
+                string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
+
+                List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);
+                clReflectCaller.clMerge(clScanOutFilePaths);
+                ExportDatabaseDirectoryList.WriteDatabasePathsListToText(clScanOutFilePaths);
+
+                clReflectCaller.clExport();
+
+                return 0;
+            }
+            catch (Exception e)
+            {
+                StringBuilder errorMessage = new StringBuilder();
+
+                if(e != null)
+                {
+                    errorMessage.Append(e.Message);
+                }
+
+                if (e.InnerException != null)
+                {
+                    errorMessage.Append(e.InnerException.Message);
+                }
+                MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
+
+                return 1;
+            }
+        }
+
 
         [DllExport]
-        static public void c_Generate_clReflect_data(IntPtr stringPtr) // pass wchar_t** to here
+        static public int c_Generate_clReflect_data(IntPtr stringPtr) // pass wchar_t** to here
         {
-            String args = Marshal.PtrToStringAuto(stringPtr);
-            String[] splittedStr = args.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int result = 0;
+            try
+            {
+                String args = Marshal.PtrToStringAuto(stringPtr);
+                String[] splittedStr = args.Split(' ');
 
-            Generate_clReflect_data(splittedStr);
+                result = Generate_clReflect_data(splittedStr);
+            }
+            catch (Exception e)
+            {
+                StringBuilder errorMessage = new StringBuilder();
+
+                if (e != null)
+                {
+                    errorMessage.Append(e.Message);
+                }
+
+                if (e.InnerException != null)
+                {
+                    errorMessage.Append(e.InnerException.Message);
+                }
+                MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
+                result = 1;
+            }
+           
+
+            return result;
         }
-
-
+        
 
         static void Main(string[] args)
         {
+            InitializeProgram();
+
             Generate_clReflect_data(args);
 
             return;
         }
-        
+
+       
+
     }
 }

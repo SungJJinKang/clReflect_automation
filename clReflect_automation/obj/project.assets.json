@@ -1,14 +1,47 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {
+    ".NETFramework,Version=v4.5": {
       "DllExport/1.7.4": {
         "type": "package",
         "compile": {
-          "lib/netstandard1.1/_._": {}
+          "lib/net20/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.1/_._": {}
+          "lib/net20/_._": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.5/win": {
+      "DllExport/1.7.4": {
+        "type": "package",
+        "compile": {
+          "lib/net20/_._": {}
+        },
+        "runtime": {
+          "lib/net20/_._": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.5/win-x64": {
+      "DllExport/1.7.4": {
+        "type": "package",
+        "compile": {
+          "lib/net20/_._": {}
+        },
+        "runtime": {
+          "lib/net20/_._": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.5/win-x86": {
+      "DllExport/1.7.4": {
+        "type": "package",
+        "compile": {
+          "lib/net20/_._": {}
+        },
+        "runtime": {
+          "lib/net20/_._": {}
         }
       }
     }
@@ -79,7 +112,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": [
+    ".NETFramework,Version=v4.5": [
       "DllExport >= 1.7.4"
     ]
   },
@@ -95,54 +128,43 @@
       "packagesPath": "C:\\Users\\kmsjk\\.nuget\\packages\\",
       "outputPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
       "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
       "configFilePaths": [
         "C:\\Users\\kmsjk\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "netcoreapp3.1"
+        "net45"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net45": {
           "projectReferences": {}
         }
-      },
-      "warningProperties": {
-        "warnAsError": [
-          "NU1605"
-        ]
       }
     },
     "frameworks": {
-      "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
+      "net45": {
         "dependencies": {
           "DllExport": {
             "target": "Package",
             "version": "[1.7.4, )"
           }
-        },
-        "imports": [
-          "net461",
-          "net462",
-          "net47",
-          "net471",
-          "net472",
-          "net48"
-        ],
-        "assetTargetFallback": true,
-        "warn": true,
-        "frameworkReferences": {
-          "Microsoft.NETCore.App": {
-            "privateAssets": "all"
-          }
-        },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "runtimes": {
+      "win": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
       }
     }
   }

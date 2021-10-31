@@ -41,7 +41,7 @@ namespace clReflect_automation
                 string line = process.StandardOutput.ReadLine();
 
                 Console.WriteLine("clExport Log ( Target Database File Path : {0} ) : {1}", DirectoryHelper.GetclMergeOutputPath(), line);
-
+           
                 if (process.HasExited == true)
                 {
                     Console.WriteLine("clExport Log ( Target Database File Path : {0} ) : {1}", DirectoryHelper.GetclMergeOutputPath(), line);
