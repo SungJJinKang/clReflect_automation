@@ -1,8 +1,7 @@
 {
   "profiles": {
     "clReflect_automation": {
-      "commandName": "Project",
-      "commandLineArgs": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect\\bin\\clscan.exe C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect\\bin\\clmerge.exe C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect\\bin\\clexport.exe C:\\Doom3FromScratch\\Doom3\\Doom3.vcxproj Release x64 -fms-extensions -fms-compatibility -fms-compatibility-version=19 -GS -O2 -ffp-model=precise -D_DEBUG -D_CONSOLE -D\"_UNICODE\" -D\"UNICODE\" -std=c++17 -Gd -MDd -std=c++17 -diagnostics:column -D _DEBUG  -D _MT  -D _DLL  -D _CONSOLE  -D _UNICODE  -D UNICODE -std=c++17 -m64 -fdelayed-template-parsing -w -mavx2"
+      "commandName": "Project"
     }
   }
 }

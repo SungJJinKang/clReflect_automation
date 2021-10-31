@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
+using RGiesecke.DllExport;
+using System.Text;
 
 namespace clReflect_automation
 {
@@ -18,266 +20,12 @@ namespace clReflect_automation
         public static string CL_EXPORT_FILE_PATH;
         public static string CL_MERGE_FILE_PATH;
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__";
+        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
         public static string ADDITIONAL_COMPILER_OPTION = "";
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
-        private const int DEFAULT_THREAD_COUNT = 4;
-
-        
-
-        private static string GetclMergeOutputPath()
-        {
-            var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(VCXPROJ_FILE_PATH));
-            sb.Append('\\');
-            sb.Append(DEFAULT_CL_SCAN_OUT_FILE_NAME);
-            sb.Append("_merged");
-            sb.Append("_");
-            sb.Append(TARGET_CONFIGURATION);
-            sb.Append("_");
-            sb.Append(TARGET_PATFORM);
-            sb.Append(".csv");
-            return sb.ToString();
-        }
-
-        private static string GetclScanOutputPath(in string path)
-        {
-            var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(path));
-            sb.Append('\\');
-            sb.Append(Path.GetFileNameWithoutExtension(path));
-            sb.Append("_");
-            sb.Append(TARGET_CONFIGURATION);
-            sb.Append("_");
-            sb.Append(TARGET_PATFORM);
-            sb.Append(".csv");
-            return sb.ToString();
-        }
-
-        private static string GetclExportOutputPath()
-        {
-            var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(VCXPROJ_FILE_PATH));
-            sb.Append('\\');
-            sb.Append(DEFAULT_CL_SCAN_OUT_FILE_NAME);
-            sb.Append("_");
-            sb.Append(TARGET_CONFIGURATION);
-            sb.Append("_");
-            sb.Append(TARGET_PATFORM);
-            sb.Append(".cppbin");
-            return sb.ToString();
-        }
-
-        private static void clMerge(in List<string> clScanOutputFilePathes)
-        {
-            Process process = new Process();
-
-            // Stop the process from opening a new window
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = false;
-
-            // Setup executable and parameters
-            process.StartInfo.FileName = CL_MERGE_FILE_PATH;
-
-            var sb = new System.Text.StringBuilder();
-            sb.Append(GetclMergeOutputPath());
-            sb.Append(' ');
-            for(int i = 0; i < clScanOutputFilePathes.Count; i++)
-            {
-                sb.Append(clScanOutputFilePathes[i]);
-                sb.Append(' ');
-            }
-
-            process.StartInfo.Arguments = sb.ToString();
-
-            Console.WriteLine("Start to clMerge");
-
-            // Go
-            bool isProcessStarted = process.Start();
-            if (isProcessStarted == false)
-            {
-                throw new Exception(String.Format("Fail to start clMerge ( clMerge.exe FilePath : {0} )", process.StartInfo.FileName));
-            }
-            ChildProcessTracker.AddProcess(process);
-
-            while (process.StandardOutput.EndOfStream == false)
-            {
-                string line = process.StandardOutput.ReadLine();
-
-                Console.WriteLine("clMerge Log : {0}", line);
-
-                if(process.HasExited == true)
-                {
-                    Console.WriteLine("clMerge Log : {0}", line);
-                    break;
-                }
-            }
-
-            int result = process.ExitCode;
-            if(result != 0)
-            {
-                throw new Exception("clMerge Fail!!");
-            }
-            else
-            {
-                Console.WriteLine("clMerge Success!! ( Merged File Path : {0} )", GetclMergeOutputPath());
-            }
-
-        }
-
-        private static void clExport()
-        {
-            Process process = new Process();
-
-            // Stop the process from opening a new window
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = false;
-
-            // Setup executable and parameters
-            process.StartInfo.FileName = CL_EXPORT_FILE_PATH;
-
-            var sb = new System.Text.StringBuilder();
-            sb.Append(GetclMergeOutputPath());
-            sb.Append(" -cpp ");
-            sb.Append(GetclExportOutputPath()); 
-
-            process.StartInfo.Arguments = sb.ToString();
-
-            Console.WriteLine("Start to clExport");
-
-            // Go
-            bool isProcessStarted = process.Start();
-            if (isProcessStarted == false)
-            {
-                throw new Exception(String.Format("Fail to start clExport ( export.exe FilePath : {0} )", process.StartInfo.FileName));
-            }
-            ChildProcessTracker.AddProcess(process);
-
-            while (process.StandardOutput.EndOfStream == false)
-            {
-                string line = process.StandardOutput.ReadLine();
-
-                Console.WriteLine("clExport Log ( Target Database File Path : {0} ) : {1}", GetclMergeOutputPath(), line);
-
-                if (process.HasExited == true)
-                {
-                    Console.WriteLine("clExport Log ( Target Database File Path : {0} ) : {1}", GetclMergeOutputPath(), line);
-                    break;
-                }
-            }
-
-            int result = process.ExitCode;
-            if (result != 0)
-            {
-                throw new Exception(String.Format("clExport Fail! ( Exported DataBase File Path : {0} )", GetclMergeOutputPath()));
-            }
-            else
-            {
-                Console.WriteLine("clExport Success!!! ( Exported Output File Path : {0} )", GetclExportOutputPath());
-            }
-
-        }
-
-        public struct clScanParameter
-        {
-            public string sourceFilePath;
-            public string outputFilePath;
-            public string additionalDirectories;
-
-        }
-
-        public static void clScan_internal(clScanParameter _clScanParameter)
-        {
-            Process process = new Process();
-
-            // Stop the process from opening a new window
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = false;
-
-            // Setup executable and parameters
-            process.StartInfo.FileName = CL_SCAN_FILE_PATH;
-
-            var sb = new System.Text.StringBuilder();
-            sb.Append(_clScanParameter.sourceFilePath);
-            sb.Append(" --output ");
-            sb.Append(_clScanParameter.outputFilePath);
-            sb.Append(" -- ");
-            sb.Append(DEFAULT_COMPILER_OPTION);
-            sb.Append(' ');
-            sb.Append(_clScanParameter.additionalDirectories);
-            sb.Append(ADDITIONAL_COMPILER_OPTION);
-
-            process.StartInfo.Arguments = sb.ToString();
-
-            Console.WriteLine("Start to clScan ( {0} )", _clScanParameter.sourceFilePath);
-
-            bool isProcessStarted = process.Start();
-            if (isProcessStarted == false)
-            {
-                throw new Exception(String.Format("Fail to start clScan ( exScan.exe FilePath: {0} )", process.StartInfo.FileName));
-            }
-            ChildProcessTracker.AddProcess(process);
-            
-
-            while (process.StandardOutput.EndOfStream == false)
-            {
-                string line = process.StandardOutput.ReadLine();
-
-                Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
-
-                if (process.HasExited == true)
-                {
-                    Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
-                    break;
-                }
-            }
-
-            int result = process.ExitCode;
-            if (result != 0)
-            {
-                throw new Exception(String.Format("clScane Fail! ( Parsed Source FilePath : {0} )", _clScanParameter.sourceFilePath));
-            }
-            else
-            {
-
-                Console.WriteLine("Success to clScan! ( output File Path :  {0} )", _clScanParameter.outputFilePath);
-            }
-
-        }
-
-        private static List<string> clScanSourceFiles(in List<string> sourceFiles, in string additionalDirectories)
-        {
-            List<string> clscanOutPutFiles = new List<string>();
-
-            for (int i = 0; i < sourceFiles.Count; i++)
-            {
-                if(sourceFiles[i] != "")
-                {
-
-                    clScanParameter _clScanParameter = new clScanParameter();
-                    _clScanParameter.sourceFilePath = sourceFiles[i];
-                    _clScanParameter.outputFilePath = GetclScanOutputPath(sourceFiles[i]);
-                    _clScanParameter.additionalDirectories = additionalDirectories;
-
-                    clscanOutPutFiles.Add(_clScanParameter.outputFilePath);
-
-                    clScan_internal(_clScanParameter);
-
-                    
-                }
-            }
-
-            return clscanOutPutFiles;
-        }
-
-
-
-
-        static void Main(string[] args)
+        private const string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
+        static private void Configure(string[] args)
         {
             Program.CL_SCAN_FILE_PATH = args[0].Trim();
             Program.CL_MERGE_FILE_PATH = args[1].Trim();
@@ -287,9 +35,9 @@ namespace clReflect_automation
             Program.TARGET_CONFIGURATION = args[4].Trim();
             Program.TARGET_PATFORM = args[5].Trim();
 
-            if(Program.TARGET_PATFORM == "x64")
+            if (Program.TARGET_PATFORM == "x64")
             {
-               
+
                 Program.ADDITIONAL_COMPILER_OPTION += @"-D""_WIN64"" ";
                 Program.ADDITIONAL_COMPILER_OPTION += @"-D""__LP64__"" ";
                 Program.ADDITIONAL_COMPILER_OPTION += @"-m64 ";
@@ -306,18 +54,42 @@ namespace clReflect_automation
             Program.ADDITIONAL_COMPILER_OPTION.Trim();
 
             Program.VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(Program.VCXPROJ_FILE_PATH);
+        }
 
 
+        static private void Generate_clReflect_data(string[] args)
+        {
+            if (args.Length == 0 || args[0].Trim() == "")
+            {
+                string setting_text_direcotry = Directory.GetCurrentDirectory() + "\\" + DEFAULT_SETTING_TEXT_FILENAME;
 
-            List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories(DEFAULT_THREAD_COUNT);
+                string setting_text_string = System.IO.File.ReadAllText(setting_text_direcotry);
+                string[] setting_text_args = setting_text_string.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                Configure(setting_text_args);
+            }
+            else
+            {
+                Configure(args);
+            }
+
+            List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories();
             string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
 
-            List<string> clScanOutFilePathes = clScanSourceFiles(SourceFileDirectories, additionalDirectories);
-            clMerge(clScanOutFilePathes);
+            List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);
+            clReflectCaller.clMerge(clScanOutFilePaths);
+            ExportDatabaseDirectoryList.WriteDatabasePathsListToText(clScanOutFilePaths);
 
-            clExport();
+            clReflectCaller.clExport();
+        }
+
+      
+
+        static void Main(string[] args)
+        {
+            Generate_clReflect_data(args);
 
             return;
         }
+        
     }
 }

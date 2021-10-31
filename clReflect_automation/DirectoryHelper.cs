@@ -60,5 +60,49 @@ namespace clReflect_automation
             return targetString;
 
         }
+
+        public static string GetclMergeOutputPath()
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
+            sb.Append('\\');
+            sb.Append(Program.DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append("_merged");
+            sb.Append("_");
+            sb.Append(Program.TARGET_CONFIGURATION);
+            sb.Append("_");
+            sb.Append(Program.TARGET_PATFORM);
+            sb.Append(".csv");
+            return sb.ToString();
+        }
+
+        public static string GetclScanOutputPath(in string path)
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(path));
+            sb.Append('\\');
+            sb.Append(Path.GetFileNameWithoutExtension(path));
+            sb.Append("_");
+            sb.Append(Program.TARGET_CONFIGURATION);
+            sb.Append("_");
+            sb.Append(Program.TARGET_PATFORM);
+            sb.Append(".csv");
+            return sb.ToString();
+        }
+
+        public static string GetclExportOutputPath()
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
+            sb.Append('\\');
+            sb.Append(Program.DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append("_");
+            sb.Append(Program.TARGET_CONFIGURATION);
+            sb.Append("_");
+            sb.Append(Program.TARGET_PATFORM);
+            sb.Append(".cppbin");
+            return sb.ToString();
+        }
+
     }
 }

@@ -8,7 +8,7 @@ namespace clReflect_automation
 {
     class ParseSourceFileDirectories
     {
-        public static List<string> GetSourceFileDirectories(in int count)
+        public static List<string> GetSourceFileDirectories()
         {
             Console.WriteLine("Detecting SourceFile Directories..");
 

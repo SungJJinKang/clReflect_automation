@@ -1,26 +1,62 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "UnmanagedExports/1.2.7": {
+        "type": "package",
+        "compile": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
+        },
+        "runtime": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "UnmanagedExports/1.2.7": {
+      "sha512": "bPIbzFaAj4AFxjHGFGPrYnUSCyIWJMkT/LFuiphWdpUbO2L9fP68W/1SP9cHCAxgiekV+kFNbybA2VvRo8PYIQ==",
+      "type": "package",
+      "path": "unmanagedexports/1.2.7",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net/RGiesecke.DllExport.Metadata.dll",
+        "tools/DllExportCmdLets.psm1",
+        "tools/Mono.Cecil.dll",
+        "tools/RGiesecke.DllExport.MSBuild.dll",
+        "tools/RGiesecke.DllExport.MSBuild.pdb",
+        "tools/RGiesecke.DllExport.dll",
+        "tools/RGiesecke.DllExport.pdb",
+        "tools/RGiesecke.DllExport.targets",
+        "tools/init.ps1",
+        "tools/install.ps1",
+        "tools/uninstall.ps1",
+        "unmanagedexports.1.2.7.nupkg.sha512",
+        "unmanagedexports.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "UnmanagedExports >= 1.2.7"
+    ]
   },
   "packageFolders": {
-    "C:\\Users\\kmsjk\\.nuget\\packages\\": {}
+    "C:\\Users\\hour3\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+      "projectUniqueName": "C:\\Voxel_Doom3_From_Scratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
       "projectName": "clReflect_automation",
-      "projectPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
-      "packagesPath": "C:\\Users\\kmsjk\\.nuget\\packages\\",
-      "outputPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
+      "projectPath": "C:\\Voxel_Doom3_From_Scratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+      "packagesPath": "C:\\Users\\hour3\\.nuget\\packages\\",
+      "outputPath": "C:\\Voxel_Doom3_From_Scratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\kmsjk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hour3\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -45,6 +81,12 @@
     "frameworks": {
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
+        "dependencies": {
+          "UnmanagedExports": {
+            "target": "Package",
+            "version": "[1.2.7, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -60,8 +102,20 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'UnmanagedExports 1.2.7' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "UnmanagedExports",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }
