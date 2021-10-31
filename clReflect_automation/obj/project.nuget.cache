@@ -1,21 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "cw/r1Q2YZjxOcN15Coy6V+G+vMq0/qKLZxvw7EeliECHz3eEUszzj6KSkRDn+thCCcQ2nJh0rtsmGcF0ET+YhQ==",
+  "dgSpecHash": "jYC0QovRh02/5SYjfLWbppw2kXjgTFwOYP8sDT8RCaqLx+xPlZXfw40VSh95eTVud63tX53i71IEoNhXbj8xhA==",
   "success": true,
-  "projectFilePath": "C:\\Voxel_Doom3_From_Scratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+  "projectFilePath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\hour3\\.nuget\\packages\\unmanagedexports\\1.2.7\\unmanagedexports.1.2.7.nupkg.sha512"
+    "C:\\Users\\kmsjk\\.nuget\\packages\\dllexport\\1.7.4\\dllexport.1.7.4.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'UnmanagedExports 1.2.7' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
-      "libraryId": "UnmanagedExports",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  "logs": []
 }

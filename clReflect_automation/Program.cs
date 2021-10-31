@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
-using RGiesecke.DllExport;
 using System.Text;
 
 namespace clReflect_automation
@@ -82,7 +81,16 @@ namespace clReflect_automation
             clReflectCaller.clExport();
         }
 
-      
+        [DllExport]
+        static public void c_Generate_clReflect_data(IntPtr stringPtr) // pass wchar_t** to here
+        {
+            String args = Marshal.PtrToStringAuto(stringPtr);
+            String[] splittedStr = args.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            Generate_clReflect_data(splittedStr);
+        }
+
+
 
         static void Main(string[] args)
         {
