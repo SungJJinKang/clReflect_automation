@@ -28,15 +28,15 @@ namespace
 {
     struct PtrSchema
     {
-        clcpp::pointer_type stride;
-        clcpp::pointer_type ptrs_offset;
-        clcpp::size_type nb_ptrs; // pointer count
+        size_t stride;
+        size_t ptrs_offset;
+        size_t nb_ptrs;
     };
 
     struct PtrRelocation
     {
         int schema_handle;
-        clcpp::pointer_type offset;
+        size_t offset;
         int nb_objects;
     };
 
@@ -198,7 +198,6 @@ namespace
     {
         // Read the header and verify the version and signature
         clcpp::internal::DatabaseFileHeader file_header, cmp_header;
-        
         if (!file->Read(&file_header, sizeof(file_header)))
             return 0;
         if (file_header.version != cmp_header.version)
@@ -218,7 +217,7 @@ namespace
             return 0;
 
         // Read the pointer offsets for all the schemas
-        clcpp::CArray<clcpp::pointer_type> ptr_offsets;
+        clcpp::CArray<size_t> ptr_offsets;
         if (!ReadArray(file, ptr_offsets, file_header.nb_ptr_offsets, allocator))
             return 0;
 
@@ -230,37 +229,35 @@ namespace
         // Iterate over every relocation instruction
         for (int i = 0; i < file_header.nb_ptr_relocations; i++)
         {
-            PtrRelocation& reloc = static_cast<PtrRelocation&>(relocations[i]);
-            PtrSchema& schema = static_cast<PtrSchema&>(schemas[reloc.schema_handle]);
+            PtrRelocation& reloc = (PtrRelocation&)relocations[i];
+            PtrSchema& schema = (PtrSchema&)schemas[reloc.schema_handle];
 
             // Take a weak C-array pointer to the schema's pointer offsets (for bounds checking)
-            clcpp::CArray<clcpp::pointer_type> schema_ptr_offsets;
-            schema_ptr_offsets.data = static_cast<clcpp::pointer_type*>(&(ptr_offsets[schema.ptrs_offset]));
-            schema_ptr_offsets.size = schema.nb_ptrs;
+            clcpp::CArray<size_t> schema_ptr_offsets;
+            schema_ptr_offsets.data = (size_t*)&ptr_offsets[schema.ptrs_offset];
+            schema_ptr_offsets.size = (unsigned int)schema.nb_ptrs;
 
             // Iterate over all objects in the instruction
             for (int j = 0; j < reloc.nb_objects; j++)
             {
-                clcpp::pointer_type object_offset = reloc.offset + j * schema.stride;
+                size_t object_offset = reloc.offset + (size_t)j * schema.stride;
 
                 // All pointers in the schema
-                for (clcpp::pointer_type k = 0; k < schema.nb_ptrs; k++)
+                for (size_t k = 0; k < schema.nb_ptrs; k++)
                 {
-                    clcpp::pointer_type ptr_offset = object_offset + schema_ptr_offsets[k];
-                    clcpp::pointer_type& ptr = reinterpret_cast<clcpp::pointer_type&>(*(base_data + ptr_offset));
+                    size_t ptr_offset = object_offset + schema_ptr_offsets[k];
+                    size_t& ptr = (size_t&)*(base_data + ptr_offset);
 
                     // Ensure the pointer relocation is within range of the memory map before patching
                     clcpp::internal::Assert(ptr <= file_header.data_size);
 
                     // Only patch non-null
                     if (ptr != 0)
-                        ptr += (size_t)base_data;
+                        ptr += (clcpp::size_type)base_data;
                 }
             }
         }
 
-        auto kk = database_mem->types;
-        
         // Release temporary array memory
         allocator->Free(relocations.data);
         allocator->Free(ptr_offsets.data);
@@ -284,9 +281,7 @@ namespace
     void ParentPrimitivesToDatabase(clcpp::CArray<TYPE>& primitives, clcpp::Database* database)
     {
         for (unsigned int i = 0; i < primitives.size; i++)
-        {
-            (*static_cast<clcpp::Primitive*>(primitives.data + i)).database = database;
-        }
+            ((clcpp::Primitive&)primitives[i]).database = database;
     }
 
     clcpp::pointer_type GetLoadAddress()
@@ -306,7 +301,23 @@ namespace
 
 CLCPP_API void clcpp::internal::Assert(bool expression)
 {
-  
+    if (expression == false)
+    {
+#ifdef CLCPP_USING_MSVC
+        __asm
+        {
+            int 3h
+        }
+#else
+        asm("int $0x3\n");
+#endif // CLCPP_USING_MSVC
+
+// Leave the program with no continuation
+// Don't want people attaching the debugger and skipping over the break
+#ifdef CLCPP_PLATFORM_WINDOWS
+        ExitProcess(1);
+#endif
+    }
 }
 
 CLCPP_API unsigned int clcpp::internal::HashData(const void* data, int length, unsigned int seed)
