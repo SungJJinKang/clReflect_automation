@@ -34,6 +34,10 @@
       "frameworks": {
         "net45": {
           "dependencies": {
+            "Conari": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
             "DllExport": {
               "target": "Package",
               "version": "[1.7.4, )"

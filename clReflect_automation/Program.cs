@@ -18,7 +18,10 @@ namespace clReflect_automation
         public static string CL_EXPORT_FILE_PATH;
         public static string CL_MERGE_FILE_PATH;
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
+
+        private const string DEFAULT_COMPILER_DEBUG_LOG_OPTION = "-v";
+
+        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -v -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
         public static string ADDITIONAL_COMPILER_OPTION = "";
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
@@ -33,23 +36,24 @@ namespace clReflect_automation
             Program.TARGET_CONFIGURATION = args[4].Trim();
             Program.TARGET_PATFORM = args[5].Trim();
 
+            StringBuilder sb = new StringBuilder();
             if (Program.TARGET_PATFORM == "x64")
             {
 
-                Program.ADDITIONAL_COMPILER_OPTION += @"-D""_WIN64"" ";
-                Program.ADDITIONAL_COMPILER_OPTION += @"-D""__LP64__"" ";
-                Program.ADDITIONAL_COMPILER_OPTION += @"-m64 ";
+                sb.Append(@"-D_WIN64 ");
+                sb.Append(@"-D__LP64__ ");
+                sb.Append(@"-m64 ");
             }
             else
             {
-                Program.ADDITIONAL_COMPILER_OPTION += "-m32 ";
+                sb.Append("-m32 ");
             }
 
             for (int i = 6; i < args.Length; i++)
             {
-                Program.ADDITIONAL_COMPILER_OPTION += args[i] + ' ';
+                sb.Append(args[i] + ' ');
             }
-            Program.ADDITIONAL_COMPILER_OPTION.Trim();
+            Program.ADDITIONAL_COMPILER_OPTION = sb.ToString().Trim();
 
             Program.VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(Program.VCXPROJ_FILE_PATH);
         }
@@ -125,6 +129,8 @@ namespace clReflect_automation
         [DllExport]
         static public int c_Generate_clReflect_data(IntPtr stringPtr) // pass wchar_t** to here
         {
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
             int result = 0;
             try
             {
@@ -150,17 +156,36 @@ namespace clReflect_automation
                 result = 1;
             }
            
-
             return result;
         }
-        
+
 
         static void Main(string[] args)
         {
-            InitializeProgram();
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
-            Generate_clReflect_data(args);
 
+            try
+            {
+                InitializeProgram();
+
+                Generate_clReflect_data(args);
+            }
+            catch (Exception e)
+            {
+                StringBuilder errorMessage = new StringBuilder();
+
+                if (e != null)
+                {
+                    errorMessage.Append(e.Message);
+                }
+
+                if (e.InnerException != null)
+                {
+                    errorMessage.Append(e.InnerException.Message);
+                }
+                MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
+            }
             return;
         }
 

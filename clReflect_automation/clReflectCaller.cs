@@ -1,7 +1,12 @@
-﻿using System;
+﻿using net.r_eg.Conari;
+using net.r_eg.Conari.Types;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace clReflect_automation
 {
@@ -118,6 +123,7 @@ namespace clReflect_automation
             }
 
         }
+
         public struct clScanParameter
         {
             public string sourceFilePath;
@@ -126,18 +132,8 @@ namespace clReflect_automation
 
         }
 
-        public static void clScan_internal(clScanParameter _clScanParameter)
+        private static String GetClScanArgv(clScanParameter _clScanParameter)
         {
-            Process process = new Process();
-
-            // Stop the process from opening a new window
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = false;
-
-            // Setup executable and parameters
-            process.StartInfo.FileName = Program.CL_SCAN_FILE_PATH;
-
             var sb = new System.Text.StringBuilder();
             sb.Append(_clScanParameter.sourceFilePath);
             sb.Append(" --output ");
@@ -146,43 +142,99 @@ namespace clReflect_automation
             sb.Append(Program.DEFAULT_COMPILER_OPTION);
             sb.Append(' ');
             sb.Append(_clScanParameter.additionalDirectories);
+            sb.Append(' ');
             sb.Append(Program.ADDITIONAL_COMPILER_OPTION);
+            
+            return sb.ToString();
+        }
 
-            process.StartInfo.Arguments = sb.ToString();
+        public static ConariL clScanConariL = null;
 
-            Console.WriteLine("Start to clScan ( {0} )", _clScanParameter.sourceFilePath);
+       
 
-            bool isProcessStarted = process.Start();
-            if (isProcessStarted == false)
+        public static void clScan_internal(clScanParameter _clScanParameter)
+        {
+            DirectoryHelper.eClreflectFileExtension clScanFileExtension = DirectoryHelper.GetClreflectFileExtension(Program.CL_SCAN_FILE_PATH);
+
+            Console.WriteLine("Start to clScan ( clScan File Path : {0} )", Program.CL_SCAN_FILE_PATH);
+
+            int result = 1;
+            
+            switch (clScanFileExtension)
             {
-                throw new Exception(String.Format("Fail to start clScan ( exScan.exe FilePath: {0} )", process.StartInfo.FileName));
-            }
-            ChildProcessTracker.AddProcess(process);
+                case DirectoryHelper.eClreflectFileExtension.EXE:
+
+                    Process process = new Process();
+
+                    // Stop the process from opening a new window
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = false;
+
+                    // Setup executable and parameters
+                    process.StartInfo.FileName = Program.CL_SCAN_FILE_PATH;
+                    process.StartInfo.Arguments = GetClScanArgv(_clScanParameter);
+
+                    bool isProcessStarted = process.Start();
+                    if (isProcessStarted == false)
+                    {
+                        throw new Exception(String.Format("Fail to start clScan ( exScan.exe FilePath: {0} )", process.StartInfo.FileName));
+                    }
+                    ChildProcessTracker.AddProcess(process);
 
 
-            while (process.StandardOutput.EndOfStream == false)
-            {
-                string line = process.StandardOutput.ReadLine();
+                    while (process.StandardOutput.EndOfStream == false)
+                    {
+                        string line = process.StandardOutput.ReadLine();
 
-                Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
+                        Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
 
-                if (process.HasExited == true)
-                {
-                    Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
+                        if (process.HasExited == true)
+                        {
+                            Console.WriteLine("clScan Log ( Target Source File Path : {0} ) : {1}", _clScanParameter.sourceFilePath, line);
+                            break;
+                        }
+                    }
+
+                    result = process.ExitCode;
+                   
+
                     break;
-                }
+
+
+                    
+
+                case DirectoryHelper.eClreflectFileExtension.DLL:
+
+                    DLLHelper.LoadDLLToConariL(ref clScanConariL, Program.CL_SCAN_FILE_PATH);
+
+                    byte[] argvASCIIStr = ASCIIEncoding.ASCII.GetBytes(GetClScanArgv(_clScanParameter));
+
+                    try
+                    {
+                        result = clScanConariL.DLR.c_clscan<int>(ref argvASCIIStr);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(String.Format("Exception occurred for clscaning file ( File Path : {0}, Error Message : {1} )", _clScanParameter.sourceFilePath, e.Message), "Exception!!!!"); // fails here
+                    }
+
+                    break;
+
+
+                default:
+                    throw new Exception(String.Format("Fail To Find clscan file ( Path : {0} )", Program.CL_SCAN_FILE_PATH).ToString());
             }
 
-            int result = process.ExitCode;
             if (result != 0)
             {
-                throw new Exception(String.Format("clScane Fail! ( Parsed Source FilePath : {0} )", _clScanParameter.sourceFilePath));
+                MessageBox.Show(String.Format("Fail to clsan file ( File Path : {0} )", _clScanParameter.sourceFilePath), "Exception!!!!"); // fails here
             }
             else
             {
-
                 Console.WriteLine("Success to clScan! ( output File Path :  {0} )", _clScanParameter.outputFilePath);
             }
+
 
         }
 
@@ -207,6 +259,8 @@ namespace clReflect_automation
 
                 }
             }
+
+            DLLHelper.UnLoadDLLFromConariL(ref clScanConariL);
 
             return clscanOutPutFiles;
         }

@@ -17,5 +17,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgDllExport Condition=" '$(PkgDllExport)' == '' ">C:\Users\kmsjk\.nuget\packages\dllexport\1.7.4</PkgDllExport>
+    <PkgConari Condition=" '$(PkgConari)' == '' ">C:\Users\kmsjk\.nuget\packages\conari\1.5.0</PkgConari>
   </PropertyGroup>
 </Project>

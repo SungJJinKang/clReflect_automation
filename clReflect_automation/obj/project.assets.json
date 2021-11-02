@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.5": {
+      "Conari/1.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp"
+        ],
+        "compile": {
+          "lib/net40/Conari.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Conari.dll": {}
+        }
+      },
       "DllExport/1.7.4": {
         "type": "package",
         "compile": {
@@ -13,6 +25,18 @@
       }
     },
     ".NETFramework,Version=v4.5/win": {
+      "Conari/1.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp"
+        ],
+        "compile": {
+          "lib/net40/Conari.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Conari.dll": {}
+        }
+      },
       "DllExport/1.7.4": {
         "type": "package",
         "compile": {
@@ -24,6 +48,18 @@
       }
     },
     ".NETFramework,Version=v4.5/win-x64": {
+      "Conari/1.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp"
+        ],
+        "compile": {
+          "lib/net40/Conari.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Conari.dll": {}
+        }
+      },
       "DllExport/1.7.4": {
         "type": "package",
         "compile": {
@@ -35,6 +71,18 @@
       }
     },
     ".NETFramework,Version=v4.5/win-x86": {
+      "Conari/1.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp"
+        ],
+        "compile": {
+          "lib/net40/Conari.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Conari.dll": {}
+        }
+      },
       "DllExport/1.7.4": {
         "type": "package",
         "compile": {
@@ -47,6 +95,39 @@
     }
   },
   "libraries": {
+    "Conari/1.5.0": {
+      "sha512": "74mInbboNDqeP/VBRq9ySitIHUxuNkM1ywUa7bA4t1wt0hkyMS62uFKsTvWW8gteOmqh6DuGRU0y+FUFx56DnA==",
+      "type": "package",
+      "path": "conari/1.5.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        ".version",
+        "3rd-party-notices.txt",
+        "Conari_v1.png",
+        "LICENSE",
+        "Readme.md",
+        "build-info.txt",
+        "changelog.txt",
+        "conari.1.5.0.nupkg.sha512",
+        "conari.nuspec",
+        "lib/net40/Conari.dll",
+        "lib/net40/Conari.xml",
+        "lib/net472/Conari.dll",
+        "lib/net472/Conari.xml",
+        "lib/net5.0/Conari.dll",
+        "lib/net5.0/Conari.xml",
+        "lib/netcoreapp2.1/Conari.dll",
+        "lib/netcoreapp2.1/Conari.xml",
+        "lib/netstandard2.0/Conari.dll",
+        "lib/netstandard2.0/Conari.xml",
+        "lib/netstandard2.1/Conari.dll",
+        "lib/netstandard2.1/Conari.xml",
+        "tools/gnt.bat",
+        "tools/hMSBuild.bat"
+      ]
+    },
     "DllExport/1.7.4": {
       "sha512": "Uw00IwE/UoJV1faJCasNXpnR3DVa/0dbKjLNS1zNinu4FehQP3y88akvoky1pAjcU6b06cu1BkG9E1IFiV+6xA==",
       "type": "package",
@@ -113,6 +194,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.5": [
+      "Conari >= 1.5.0",
       "DllExport >= 1.7.4"
     ]
   },
@@ -149,6 +231,10 @@
     "frameworks": {
       "net45": {
         "dependencies": {
+          "Conari": {
+            "target": "Package",
+            "version": "[1.5.0, )"
+          },
           "DllExport": {
             "target": "Package",
             "version": "[1.7.4, )"

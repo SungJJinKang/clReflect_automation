@@ -85,6 +85,7 @@
     <Compile Include="ChildProcessTracker.cs" />
     <Compile Include="clReflectCaller.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="DLLHelper.cs" />
     <Compile Include="ExportDatabaseDirectoryList.cs" />
     <Compile Include="ParseAdditionalDirectories.cs" />
     <Compile Include="ParseSourceFileDirectories.cs" />
@@ -95,6 +96,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Conari" Version="1.5.0" />
     <PackageReference Include="DllExport">
       <Version>1.7.4</Version>
       <Visible>false</Visible>

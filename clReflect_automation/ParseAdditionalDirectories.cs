@@ -85,16 +85,15 @@ namespace clReflect_automation
                     {
                         if (addtionalPath != "")
                         {
-                            sb.Append("-I\"");
+                            sb.Append(@"-I");
                             string parsedAdditionalPath = ParseAdditionalPath(addtionalPath);
                             sb.Append(parsedAdditionalPath);
-                            sb.Append("\" ");
+                            sb.Append(@" ");
 
                             Console.WriteLine(parsedAdditionalPath);
                         }
-                        
                     }
-
+                    sb.Remove(sb.Length - 1, 1);
                     resultStr = sb.ToString();
                 }
 
