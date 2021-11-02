@@ -394,3 +394,7 @@ FodyWeavers.xsd
 
 !clReflect
 *.csv
+
+~clscan.dll
+~clmerge.dll
+~clexport.dll
