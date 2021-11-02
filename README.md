@@ -24,8 +24,8 @@ ex) clReflect_automation.exe C:\Users\hour3\Downloads\clReflect-SDK-v0.5.11\bin\
 
 ## Roadmap
 
-- Import clscan, clexport, clmerge as dll
-- Analyze SourceFiles and If Source Files changed, Regenerating reflection data
+- Optimize C# Codes
+- Analyze SourceFiles metadata and If Source Files changed, Regenerating reflection data
 - Fully support parsing *.vcxproj
 - Support CMakeLists.txt
 
