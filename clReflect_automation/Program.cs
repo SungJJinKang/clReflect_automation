@@ -21,7 +21,7 @@ namespace clReflect_automation
 
         private const string DEFAULT_COMPILER_DEBUG_LOG_OPTION = "-v";
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -v -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
+        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
         public static string ADDITIONAL_COMPILER_OPTION = "";
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
@@ -29,8 +29,13 @@ namespace clReflect_automation
         static private void Configure(string[] args)
         {
             Program.CL_SCAN_FILE_PATH = args[0].Trim();
+            Console.WriteLine("CL_SCAN_FILE_PATH : {0}", Program.CL_SCAN_FILE_PATH);
+
             Program.CL_MERGE_FILE_PATH = args[1].Trim();
+            Console.WriteLine("CL_MERGE_FILE_PATH : {0}", Program.CL_MERGE_FILE_PATH);
+
             Program.CL_EXPORT_FILE_PATH = args[2].Trim();
+            Console.WriteLine("CL_EXPORT_FILE_PATH : {0}", Program.CL_EXPORT_FILE_PATH);
 
             Program.VCXPROJ_FILE_PATH = args[3].Trim();
             Program.TARGET_CONFIGURATION = args[4].Trim();
