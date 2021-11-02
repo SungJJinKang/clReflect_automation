@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace clReflect_automation
 {
@@ -14,7 +15,19 @@ namespace clReflect_automation
         {
             if (conariL == null)
             {
-                conariL = new ConariL(dllPath, CallingConvention.Cdecl);
+                try
+                {
+                    Console.WriteLine("Try Load DLL : {0}", dllPath);
+                    Console.Out.Flush();
+
+                    conariL = new ConariL(dllPath, CallingConvention.Cdecl);
+
+                    Console.WriteLine("Load DLL Success : {0}", dllPath);
+                }
+                catch(Exception e)
+                {
+                    throw new Exception(String.Format("Fail to LoadDLL ( DllPath : {0}, ErrorMessage : {1}, ErrorMessage ( Inner ) : {1} )", dllPath, e.Message, e.InnerException.Message));
+                }
             }
         }
 
@@ -22,8 +35,15 @@ namespace clReflect_automation
         {
             if (conariL != null)
             {
-                conariL.Dispose();
-                conariL = null;
+                try
+                {
+                    conariL.Dispose();
+                    conariL = null;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(String.Format("Fail to ULoadDLL (  ErrorMessage : {1}, ErrorMessage ( Inner ) : {1} )", e.Message, e.InnerException.Message));
+                }
             }
         }
     }

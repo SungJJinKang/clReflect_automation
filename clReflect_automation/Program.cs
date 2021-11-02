@@ -67,11 +67,11 @@ namespace clReflect_automation
 
                 AppDomain.CurrentDomain.UnhandledException +=
                     (object sender, UnhandledExceptionEventArgs e)
-                    => MessageBox.Show($"UnhandledException");
+                    => ExceptionHelper.ShowExceptionMessageBox(e);
 
                 Application.ThreadException +=
                     (object sender, ThreadExceptionEventArgs e)
-                    => MessageBox.Show($"ThreadException: {e?.Exception?.Message}");
+                    => ExceptionHelper.ShowExceptionMessageBox(e);
             }
         }
 
@@ -108,19 +108,7 @@ namespace clReflect_automation
             }
             catch (Exception e)
             {
-                StringBuilder errorMessage = new StringBuilder();
-
-                if(e != null)
-                {
-                    errorMessage.Append(e.Message);
-                }
-
-                if (e.InnerException != null)
-                {
-                    errorMessage.Append(e.InnerException.Message);
-                }
-                MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
-
+                ExceptionHelper.ShowExceptionMessageBox(e);
                 return 1;
             }
         }
@@ -141,18 +129,7 @@ namespace clReflect_automation
             }
             catch (Exception e)
             {
-                StringBuilder errorMessage = new StringBuilder();
-
-                if (e != null)
-                {
-                    errorMessage.Append(e.Message);
-                }
-
-                if (e.InnerException != null)
-                {
-                    errorMessage.Append(e.InnerException.Message);
-                }
-                MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
+                ExceptionHelper.ShowExceptionMessageBox(e);
                 result = 1;
             }
            
@@ -173,18 +150,7 @@ namespace clReflect_automation
             }
             catch (Exception e)
             {
-                StringBuilder errorMessage = new StringBuilder();
-
-                if (e != null)
-                {
-                    errorMessage.Append(e.Message);
-                }
-
-                if (e.InnerException != null)
-                {
-                    errorMessage.Append(e.InnerException.Message);
-                }
-                MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
+                ExceptionHelper.ShowExceptionMessageBox(e);
             }
             return;
         }

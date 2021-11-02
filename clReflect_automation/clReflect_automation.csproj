@@ -86,6 +86,7 @@
     <Compile Include="clReflectCaller.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="DLLHelper.cs" />
+    <Compile Include="ExceptionHelper.cs" />
     <Compile Include="ExportDatabaseDirectoryList.cs" />
     <Compile Include="ParseAdditionalDirectories.cs" />
     <Compile Include="ParseSourceFileDirectories.cs" />

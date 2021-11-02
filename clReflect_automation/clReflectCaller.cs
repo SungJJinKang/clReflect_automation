@@ -124,7 +124,7 @@ namespace clReflect_automation
 
         }
 
-        public struct clScanParameter
+        private struct clScanParameter
         {
             public string sourceFilePath;
             public string outputFilePath;
@@ -152,7 +152,7 @@ namespace clReflect_automation
 
        
 
-        public static void clScan_internal(clScanParameter _clScanParameter)
+        private static void clScan_internal(clScanParameter _clScanParameter)
         {
             DirectoryHelper.eClreflectFileExtension clScanFileExtension = DirectoryHelper.GetClreflectFileExtension(Program.CL_SCAN_FILE_PATH);
 
@@ -210,6 +210,9 @@ namespace clReflect_automation
 
                     byte[] argvASCIIStr = ASCIIEncoding.ASCII.GetBytes(GetClScanArgv(_clScanParameter));
 
+                    Console.Write("Args : ");
+                    Console.WriteLine(GetClScanArgv(_clScanParameter));
+
                     try
                     {
                         result = clScanConariL.DLR.c_clscan<int>(ref argvASCIIStr);
@@ -259,6 +262,8 @@ namespace clReflect_automation
 
                 }
             }
+
+            Console.WriteLine("clscan is finished!!");
 
             DLLHelper.UnLoadDLLFromConariL(ref clScanConariL);
 
