@@ -13,26 +13,13 @@ namespace clReflect_automation
         public static void ShowExceptionMessageBox(Exception e)
         {
             StringBuilder errorMessage = new StringBuilder();
-
+            
+            errorMessage.Append(string.Format("[ {0:yyyy-MM-dd hh:mm s} ] Application Name", DateTime.Now));
+            errorMessage.Append("Module : " + e.Source);
+            errorMessage.Append('\n');
             if (e != null)
             {
-                errorMessage.Append("Exception Message : ");
-                errorMessage.Append(e.Message);
-                errorMessage.Append('\n');
-            }
-
-            if (e.InnerException != null)
-            {
-                errorMessage.Append("InnerException Message : ");
-                errorMessage.Append(e.InnerException.Message);
-                errorMessage.Append('\n');
-            }
-
-            if (e != null)
-            {
-                errorMessage.Append("StackTrace : ");
-                errorMessage.Append(e.StackTrace);
-                errorMessage.Append('\n');
+                errorMessage.Append(e.ToString());
             }
 
             MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
