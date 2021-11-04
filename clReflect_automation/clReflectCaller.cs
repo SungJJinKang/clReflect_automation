@@ -181,7 +181,16 @@ namespace clReflect_automation
             sb.Append(_clScanParameter.additionalDirectories);
             sb.Append(' ');
             sb.Append(Program.ADDITIONAL_COMPILER_OPTION);
-            
+            sb.Append(" -MD -MF ");
+            sb.Append(Path.GetDirectoryName(_clScanParameter.sourceFilePath));
+            sb.Append('\\');
+            sb.Append(Path.GetFileNameWithoutExtension(_clScanParameter.sourceFilePath));
+            sb.Append(".d");
+
+
+
+
+
             return sb.ToString();
         }
 

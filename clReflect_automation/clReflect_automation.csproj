@@ -97,11 +97,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Conari" Version="1.5.0" />
+    <PackageReference Include="Conari" Version="1.5.0" />
     <PackageReference Include="DllExport">
       <Version>1.7.4</Version>
       <Visible>false</Visible>
       <Wz>1</Wz>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DevPlan.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ImportGroup Label=".NET DllExport">

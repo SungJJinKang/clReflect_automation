@@ -100,6 +100,8 @@ namespace clReflect_automation
         public static string GetclScanOutputPath(in string path)
         {
             var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(path));
+            sb.Append('\\');
             sb.Append(Path.GetFileNameWithoutExtension(path));
             sb.Append("_");
             sb.Append(Program.TARGET_CONFIGURATION);
@@ -107,9 +109,7 @@ namespace clReflect_automation
             sb.Append(Program.TARGET_PATFORM);
             sb.Append(".csv");
 
-            string returnPath = GetFileDirectoryInProjectFolder(sb);
-
-            return returnPath;
+            return sb.ToString();
         }
 
         public static string GetclExportOutputPath()
