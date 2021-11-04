@@ -14,7 +14,7 @@ namespace clReflect_automation
             in string dataDirectoryListTextFileName
         )
         {
-            string databaseDirectoryListTextPath = Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH) + "\\" + dataDirectoryListTextFileName + ".txt";
+            string databaseDirectoryListTextPath = DirectoryHelper.GetFileDirectoryInProjectFolder(dataDirectoryListTextFileName + ".txt");
 
             // Write the string array to a new file named "WriteLines.txt".
             using (StreamWriter outputFile = new StreamWriter(databaseDirectoryListTextPath))

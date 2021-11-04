@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{17B20472-246C-42B3-B9E8-22C9992C69A2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>clReflect_automation</RootNamespace>
     <AssemblyName>clReflect_automation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -82,7 +82,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChildProcessTracker.cs" />
     <Compile Include="clReflectCaller.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="DLLHelper.cs" />

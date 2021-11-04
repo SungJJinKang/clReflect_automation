@@ -10,36 +10,55 @@ namespace clReflect_automation
 {
     class Program
     {
-        public static string VCXPROJ_FILE_PATH;
-        public static string VCXPROJ_FILE_TEXT;
-        public static string TARGET_CONFIGURATION;
-        public static string TARGET_PATFORM;
-        public static string CL_SCAN_FILE_PATH;
-        public static string CL_EXPORT_FILE_PATH;
-        public static string CL_MERGE_FILE_PATH;
+        private static string __VCXPROJ_FILE_PATH;
+        public static string VCXPROJ_FILE_PATH { get { return __VCXPROJ_FILE_PATH; } }
+
+        private static string __VCXPROJ_FILE_TEXT;
+        public static string VCXPROJ_FILE_TEXT { get { return __VCXPROJ_FILE_TEXT; } }
+
+        private static string __TARGET_CONFIGURATION;
+        public static string TARGET_CONFIGURATION { get { return __TARGET_CONFIGURATION; } }
+
+        private static string __TARGET_PATFORM;
+        public static string TARGET_PATFORM { get { return __TARGET_PATFORM; } }
+
+        private static string __CL_SCAN_FILE_PATH;
+        public static string CL_SCAN_FILE_PATH { get { return __CL_SCAN_FILE_PATH; } }
+
+        private static string __CL_EXPORT_FILE_PATH;
+        public static string CL_EXPORT_FILE_PATH { get { return __CL_EXPORT_FILE_PATH; } }
+
+        private static string __CL_MERGE_FILE_PATH;
+        public static string CL_MERGE_FILE_PATH { get { return __CL_MERGE_FILE_PATH; } }
+
+        private static string __ADDITIONAL_COMPILER_OPTION = "";
+        public static string ADDITIONAL_COMPILER_OPTION { get { return __ADDITIONAL_COMPILER_OPTION; } }
 
 
-        private const string DEFAULT_COMPILER_DEBUG_LOG_OPTION = "-v";
+        public const string DEFAULT_COMPILER_DEBUG_LOG_OPTION = "-v";
 
         public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
-        public static string ADDITIONAL_COMPILER_OPTION = "";
+       
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
+        public const string DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
+
         private const string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
+
         static private void Configure(string[] args)
         {
-            Program.CL_SCAN_FILE_PATH = args[0].Trim();
+            Program.__CL_SCAN_FILE_PATH = args[0].Trim();
             Console.WriteLine("CL_SCAN_FILE_PATH : {0}", Program.CL_SCAN_FILE_PATH);
 
-            Program.CL_MERGE_FILE_PATH = args[1].Trim();
+            Program.__CL_MERGE_FILE_PATH = args[1].Trim();
             Console.WriteLine("CL_MERGE_FILE_PATH : {0}", Program.CL_MERGE_FILE_PATH);
 
-            Program.CL_EXPORT_FILE_PATH = args[2].Trim();
+            Program.__CL_EXPORT_FILE_PATH = args[2].Trim();
             Console.WriteLine("CL_EXPORT_FILE_PATH : {0}", Program.CL_EXPORT_FILE_PATH);
 
-            Program.VCXPROJ_FILE_PATH = args[3].Trim();
-            Program.TARGET_CONFIGURATION = args[4].Trim();
-            Program.TARGET_PATFORM = args[5].Trim();
+            Program.__VCXPROJ_FILE_PATH = args[3].Trim();
+            Program.__TARGET_CONFIGURATION = args[4].Trim();
+            Program.__TARGET_PATFORM = args[5].Trim();
 
             StringBuilder sb = new StringBuilder();
             if (Program.TARGET_PATFORM == "x64")
@@ -58,9 +77,9 @@ namespace clReflect_automation
             {
                 sb.Append(args[i] + ' ');
             }
-            Program.ADDITIONAL_COMPILER_OPTION = sb.ToString().Trim();
+            Program.__ADDITIONAL_COMPILER_OPTION = sb.ToString().Trim();
 
-            Program.VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(Program.VCXPROJ_FILE_PATH);
+            Program.__VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(Program.VCXPROJ_FILE_PATH);
         }
 
         static private bool isInitialized = false;

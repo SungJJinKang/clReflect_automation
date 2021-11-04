@@ -9,6 +9,26 @@ namespace clReflect_automation
 {
     class DirectoryHelper
     {
+        public static string GetFileDirectoryInProjectFolder(in string filename)
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
+            sb.Append('\\');
+            sb.Append(filename);
+            return sb.ToString();
+        }
+
+        public static string GetFileDirectoryInProjectFolder(in StringBuilder filename)
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
+            sb.Append('\\');
+            sb.Append(filename);
+            return sb.ToString();
+        }
+
+        //
+
         public static string ConvertPathMacros(in string macros)
         {
             string targetString = "";
@@ -64,8 +84,6 @@ namespace clReflect_automation
         public static string GetclMergeOutputPath()
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
-            sb.Append('\\');
             sb.Append(Program.DEFAULT_CL_SCAN_OUT_FILE_NAME);
             sb.Append("_merged");
             sb.Append("_");
@@ -73,35 +91,40 @@ namespace clReflect_automation
             sb.Append("_");
             sb.Append(Program.TARGET_PATFORM);
             sb.Append(".csv");
-            return sb.ToString();
+
+            string returnPath = GetFileDirectoryInProjectFolder(sb);
+
+            return returnPath;
         }
 
         public static string GetclScanOutputPath(in string path)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(path));
-            sb.Append('\\');
             sb.Append(Path.GetFileNameWithoutExtension(path));
             sb.Append("_");
             sb.Append(Program.TARGET_CONFIGURATION);
             sb.Append("_");
             sb.Append(Program.TARGET_PATFORM);
             sb.Append(".csv");
-            return sb.ToString();
+
+            string returnPath = GetFileDirectoryInProjectFolder(sb);
+
+            return returnPath;
         }
 
         public static string GetclExportOutputPath()
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
-            sb.Append('\\');
             sb.Append(Program.DEFAULT_CL_SCAN_OUT_FILE_NAME);
             sb.Append("_");
             sb.Append(Program.TARGET_CONFIGURATION);
             sb.Append("_");
             sb.Append(Program.TARGET_PATFORM);
             sb.Append(".cppbin");
-            return sb.ToString();
+
+            string returnPath = GetFileDirectoryInProjectFolder(sb);
+
+            return returnPath;
         }
 
 
