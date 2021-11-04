@@ -18,7 +18,6 @@ namespace clReflect_automation
                 try
                 {
                     Console.WriteLine("Try Load DLL : {0}", dllPath);
-                    Console.Out.Flush();
 
                     conariL = new ConariL(dllPath, CallingConvention.Cdecl);
 

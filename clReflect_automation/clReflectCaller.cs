@@ -12,9 +12,9 @@ namespace clReflect_automation
 {
     class clReflectCaller
     {
-        public static ConariL clScanConariL = null;
-        public static ConariL clMergeConariL = null;
-        public static ConariL clExportConariL = null;
+        private static ConariL clScanConariL = null;
+        private static ConariL clMergeConariL = null;
+        private static ConariL clExportConariL = null;
 
         private static bool FindMapFileInProjectFolder(ref String mapFilePath)
         {
@@ -55,6 +55,9 @@ namespace clReflect_automation
         }
         public static void clExport()
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             int result = 1;
 
             DLLHelper.LoadDLLToConariL(ref clExportConariL, Program.CL_EXPORT_FILE_PATH);
@@ -89,6 +92,9 @@ namespace clReflect_automation
             {
                 Console.WriteLine("clExport Success!!! ( Exported Output File Path : {0} )", DirectoryHelper.GetclExportOutputPath());
             }
+
+            stopWatch.Stop();
+            Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
         }
 
         private static string GetclMergeArguments(in List<string> clScanOutputFilePathes)
@@ -112,6 +118,9 @@ namespace clReflect_automation
 
         public static void clMerge(in List<string> clScanOutputFilePathes)
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             int result = 1;
 
             DLLHelper.LoadDLLToConariL(ref clMergeConariL, Program.CL_MERGE_FILE_PATH);
@@ -148,6 +157,8 @@ namespace clReflect_automation
                 Console.WriteLine("clMerge Success!! ( Merged File Path : {0} )", DirectoryHelper.GetclMergeOutputPath());
             }
 
+            stopWatch.Stop();
+            Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
         }
 
         private struct clScanParameter
@@ -179,8 +190,7 @@ namespace clReflect_automation
 
         private static void clScan_internal(clScanParameter _clScanParameter)
         {
-            Console.WriteLine("Start to clScan ( Target SourceFile File Path : {0} )", _clScanParameter.sourceFilePath);
-
+            
             int result = 1;
 
             DLLHelper.LoadDLLToConariL(ref clScanConariL, Program.CL_SCAN_FILE_PATH);
@@ -191,6 +201,7 @@ namespace clReflect_automation
                     string arvs = GetClScanArgv(_clScanParameter);
                     NativeString<CharPtr> unmanagedStringArgv = new NativeString<CharPtr>(arvs);
 
+                    Console.WriteLine("Start to clScan ( Target SourceFile File Path : {0} )", _clScanParameter.sourceFilePath);
                     result = clScanConariL.DLR.c_clscan<int>(unmanagedStringArgv);
 
                     unmanagedStringArgv.Dispose();
@@ -219,6 +230,9 @@ namespace clReflect_automation
 
         public static List<string> clScanSourceFiles(in List<string> sourceFiles, in string additionalDirectories)
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             List<string> clscanOutPutFiles = new List<string>();
 
             for (int i = 0; i < sourceFiles.Count; i++)
@@ -242,6 +256,9 @@ namespace clReflect_automation
             Console.WriteLine("clscan is finished!!");
 
             DLLHelper.UnLoadDLLFromConariL(ref clScanConariL);
+
+            stopWatch.Stop();
+            Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
 
             return clscanOutPutFiles;
         }
