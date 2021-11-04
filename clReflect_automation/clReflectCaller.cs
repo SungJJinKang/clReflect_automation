@@ -72,6 +72,9 @@ namespace clReflect_automation
                 sb.Append(clScanOutputFilePathes[i]);
                 sb.Append(' ');
             }
+
+            sb.Length = sb.Length - 1;
+
             return sb.ToString();
         }
 
