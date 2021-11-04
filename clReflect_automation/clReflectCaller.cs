@@ -16,12 +16,41 @@ namespace clReflect_automation
         public static ConariL clMergeConariL = null;
         public static ConariL clExportConariL = null;
 
+        private static bool FindMapFileInProjectFolder(ref String mapFilePath)
+        {
+            string[] files = System.IO.Directory.GetFiles(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH), "*.map");
+            if(files.Length > 0)
+            {
+                mapFilePath = DirectoryHelper.GetFileDirectoryInProjectFolder(files[0]);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private static string GetclExportArguments()
         {
             var sb = new System.Text.StringBuilder();
             sb.Append(DirectoryHelper.GetclMergeOutputPath());
             sb.Append(" -cpp ");
             sb.Append(DirectoryHelper.GetclExportOutputPath());
+
+            String mapFilePath = "";
+            if(FindMapFileInProjectFolder(ref mapFilePath) == true)
+            {
+                sb.Append(" -map ");
+                sb.Append(mapFilePath);
+
+                Console.WriteLine("Find .map File!!!! ( Map File Path : {0} )", mapFilePath);
+            }
+            else
+            {
+                Console.WriteLine(".map File not found");
+            }
+
+
             return sb.ToString();
         }
         public static void clExport()
