@@ -13,9 +13,17 @@ This library support using [clReflect](https://github.com/SungJJinKang/clReflect
 
 ## How To Use
 
+To generate source file dependency list file            
+Please enable /sourceDependencies option ( MSVC )          
+Please add compiler option ( -M -MT ~~ )      
+
+This is for preventing recompile unchanged files        
+
+----------------------------
+
 
 ```
-clReflect_automation.exe [clscan.exe Path] [clmerge.exe Path] [clexport.exe Path] [Project Folder ( including CMakeLists.txt, *.vcxproj... )]  [Compile Configuration] [Compile Platform] [Additional Compiler Command Lines ( optional )]                
+clReflect_automation.exe [clscan Path] [clmerge Path] [clexport Path] [Project Folder ( including CMakeLists.txt, *.vcxproj... )]  [Compile Configuration] [Compile Platform] [Additional Compiler Command Lines ( optional )]                
 ```
 
 ```

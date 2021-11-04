@@ -31,6 +31,9 @@ namespace clReflect_automation
         private static string __CL_MERGE_FILE_PATH;
         public static string CL_MERGE_FILE_PATH { get { return __CL_MERGE_FILE_PATH; } }
 
+        private static string __DEPENDENCY_FILES_FOLDER = "";
+        public static string DEPENDENCY_FILES_FOLDER { get { return __DEPENDENCY_FILES_FOLDER; } }
+
         private static string __ADDITIONAL_COMPILER_OPTION = "";
         public static string ADDITIONAL_COMPILER_OPTION { get { return __ADDITIONAL_COMPILER_OPTION; } }
 
@@ -59,6 +62,15 @@ namespace clReflect_automation
             Program.__VCXPROJ_FILE_PATH = args[3].Trim();
             Program.__TARGET_CONFIGURATION = args[4].Trim();
             Program.__TARGET_PATFORM = args[5].Trim();
+
+            foreach(string arg in args)
+            {
+                if(arg.StartsWith("-SD"))
+                {
+                    __DEPENDENCY_FILES_FOLDER = arg.Substring(3);
+                    break;
+                }
+            }
 
             StringBuilder sb = new StringBuilder();
             if (Program.TARGET_PATFORM == "x64")
