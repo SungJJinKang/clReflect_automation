@@ -63,11 +63,12 @@ namespace clReflect_automation
             Program.__TARGET_CONFIGURATION = args[4].Trim();
             Program.__TARGET_PATFORM = args[5].Trim();
 
-            foreach(string arg in args)
+            for(int i = 0; i < args.Length; i++)
             {
-                if(arg.StartsWith("-SD"))
+                if(args[i].StartsWith("-SD"))
                 {
-                    __DEPENDENCY_FILES_FOLDER = arg.Substring(3);
+                    __DEPENDENCY_FILES_FOLDER = args[i].Substring(3);
+                    args[i] = "";
                     break;
                 }
             }
@@ -87,7 +88,10 @@ namespace clReflect_automation
 
             for (int i = 6; i < args.Length; i++)
             {
-                sb.Append(args[i] + ' ');
+                if(args[i].Length != 0)
+                {
+                    sb.Append(args[i] + ' ');
+                }
             }
             Program.__ADDITIONAL_COMPILER_OPTION = sb.ToString().Trim();
 

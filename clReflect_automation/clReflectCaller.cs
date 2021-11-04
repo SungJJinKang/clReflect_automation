@@ -199,7 +199,7 @@ namespace clReflect_automation
         
        
 
-        private static void clScan_internal(clScanParameter _clScanParameter)
+        private static void clScan_internal(clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
         {
             
             int result = 1;
@@ -233,7 +233,11 @@ namespace clReflect_automation
             }
             else
             {
-                Console.WriteLine("Success to clScan! ( output File Path :  {0} )", _clScanParameter.outputFilePath);
+                Console.WriteLine
+                    (
+                    "Success to clScan! ( output File Path :  {0}, Completion : {1} / {2} )", 
+                    _clScanParameter.outputFilePath, (completedSourceFileCount + 1).ToString(), totalSourceFileCount.ToString()
+                    );
             }
 
 
@@ -258,7 +262,7 @@ namespace clReflect_automation
 
                     clscanOutPutFiles.Add(_clScanParameter.outputFilePath);
 
-                    clScan_internal(_clScanParameter);
+                    clScan_internal(_clScanParameter, i , sourceFiles.Count);
 
 
                 }
