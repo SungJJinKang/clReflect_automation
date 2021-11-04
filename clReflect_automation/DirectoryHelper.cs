@@ -104,30 +104,6 @@ namespace clReflect_automation
             return sb.ToString();
         }
 
-        public enum eClreflectFileExtension
-        { 
-            EXE,
-            DLL,
-            NONE
-        };
-
-        public static eClreflectFileExtension GetClreflectFileExtension(in string filePath)
-        {
-            string extension = Path.GetExtension(filePath);
-            if(extension == ".dll")
-            {
-                return DirectoryHelper.eClreflectFileExtension.DLL;
-            }
-            else if (extension == ".exe")
-            {
-                return DirectoryHelper.eClreflectFileExtension.EXE;
-            }
-            else
-            {
-                return DirectoryHelper.eClreflectFileExtension.NONE;
-            }
-        }
-
 
     }
 }
