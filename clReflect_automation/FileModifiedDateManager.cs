@@ -9,27 +9,31 @@ namespace clReflect_automation
 {
     class FileModifiedDateManager
     {
-        private static Dictionary<String, DateTime> FileModifiedDate;
+        private static Dictionary<String, DateTime> FileModifiedDateTimeCache = new Dictionary<string, DateTime>();
 
-        private static DateTime GetFileModifiedData(in string filePath)
+        public static DateTime GetFileModifiedData(in string filePath)
         {
-            return File.GetLastWriteTime(filePath);
+            DateTime fileModifiedDateTime;
+
+            if (FileModifiedDateTimeCache.ContainsKey(filePath) == true)
+            {
+                fileModifiedDateTime = FileModifiedDateTimeCache[filePath];
+            }
+            else
+            {
+                fileModifiedDateTime = File.GetLastWriteTime(filePath);
+                FileModifiedDateTimeCache.Add(filePath, fileModifiedDateTime);
+            }
+
+            return fileModifiedDateTime;
         }
 
         public static bool CheckIsFileModified(in string filePath, in DateTime compareDate)
         {
-            bool isModified = true;
-            if(FileModifiedDate.ContainsKey(filePath) == false)
-            {
-                FileModifiedDate.Add(filePath, compareDate);
-            }
-            else
-            {
-                DateTime fileModifiedDate = GetFileModifiedData(filePath);
+            DateTime fileModifiedDate = GetFileModifiedData(filePath);
 
-                //Is "File's stored modified date" is later than "compareData"
-                isModified = fileModifiedDate.CompareTo(compareDate) > 0; 
-            }
+            //Is "File's stored modified date" is later than "compareData"
+            bool isModified = fileModifiedDate.CompareTo(compareDate) > 0;
 
             return isModified;
         }

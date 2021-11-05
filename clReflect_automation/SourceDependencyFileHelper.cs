@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace clReflect_automation
 {
@@ -18,7 +19,7 @@ namespace clReflect_automation
         }
 
 
-        private static Dictionary<String, List<String>> SourceFileDependencyList = new Dictionary<string, List<string>>();
+        private static Dictionary<String, List<String>> SourceFile_s_DependentFilePathList_Cache = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// return SourceFileDependencyFile Path
@@ -42,7 +43,7 @@ namespace clReflect_automation
             return sb.ToString();
         }
 
-        private static eSourceDependencyFileType CheckSourceFileDependencyFileType(in string sourceFilePath)
+        public static eSourceDependencyFileType CheckSourceFileDependencyFileType(in string sourceFilePath)
         {
             return eSourceDependencyFileType.VISUAL_STUDIO_SOURCE_DEPENDENCIES;
         }
@@ -54,7 +55,7 @@ namespace clReflect_automation
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <returns></returns>
-        private static List<String> ParseSourceFileDependencyFile(in string sourceFilePath)
+        private static List<String> GetDependentFilePathListFromDependencyFile(in string sourceFilePath)
         {
             List<String> dependencyFilePathList = null;
 
@@ -66,13 +67,16 @@ namespace clReflect_automation
 
                     String SourceFileDependencyFilePath = ConvertSourceFilePathToSourceFileDependencyFile(sourceFilePath);
 
-                    using (StreamReader reader = File.OpenText(SourceFileDependencyFilePath))
+                    if (File.Exists(SourceFileDependencyFilePath) == true) // This function is case - insensitive
                     {
-                        JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                        using (StreamReader reader = File.OpenText(SourceFileDependencyFilePath)) // This function is case - insensitive
+                        {
+                            JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
 
-                        JArray categories = (JArray)o["Data"]["Includes"];
+                            JArray categories = (JArray)o["Data"]["Includes"];
 
-                        dependencyFilePathList = categories.Select(c => (string)c).ToList();
+                            dependencyFilePathList = categories.Select(c => (string)c).ToList();
+                        }
                     }
 
                     break;
@@ -88,14 +92,18 @@ namespace clReflect_automation
             return dependencyFilePathList;
         }
 
-        public static List<String> GetSourceFileDependencyList(in string sourceFilePath)
+        public static List<String> GetSourceFile_s_DependentFilePathList(in string sourceFilePath)
         {
-            if(SourceFileDependencyList.ContainsKey(sourceFilePath) == false)
+            List<String> sourceFile_s_DependentFilePathList = null;
+
+            if (SourceFile_s_DependentFilePathList_Cache.ContainsKey(sourceFilePath) == false)
             {
-                SourceFileDependencyList[sourceFilePath] = ParseSourceFileDependencyFile(sourceFilePath);
+                sourceFile_s_DependentFilePathList = GetDependentFilePathListFromDependencyFile(sourceFilePath);
+
+                SourceFile_s_DependentFilePathList_Cache.Add(sourceFilePath, sourceFile_s_DependentFilePathList);
             }
 
-            return SourceFileDependencyList[sourceFilePath];
+            return sourceFile_s_DependentFilePathList;
         }
 
         public static bool GetIsDependencyFolderEmpty(in eSourceDependencyFileType dependencyFileType)

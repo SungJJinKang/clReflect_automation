@@ -10,13 +10,16 @@ namespace clReflect_automation
     {
         public static List<string> GetSourceFileDirectories()
         {
+#if DEBUG
             Console.WriteLine("Detecting SourceFile Directories..");
-
+#endif
             string SourceFileDirectories_pattern = "<ClCompile Include=\"(.*?)\"";
             Regex SourceFileDirectories_rgx = new Regex(SourceFileDirectories_pattern, RegexOptions.Singleline);
             MatchCollection SourceFileDirectories_matches = SourceFileDirectories_rgx.Matches(Program.VCXPROJ_FILE_TEXT);
 
+#if DEBUG
             Console.WriteLine("SourceFile Directories List : ");
+#endif
 
             List<string> sourceFileList = new List<string>();
 
@@ -28,7 +31,9 @@ namespace clReflect_automation
                 sourceFileDirectory = sourceFileDirectory.Trim();
                 sourceFileDirectory.Replace("\n", "");
 
+#if DEBUG
                 Console.WriteLine(sourceFileDirectory);
+#endif
 
                 sb.Append(DirectoryHelper.ConvertPathMacros("$(SolutionDir)"));
                 sb.Append('\\');

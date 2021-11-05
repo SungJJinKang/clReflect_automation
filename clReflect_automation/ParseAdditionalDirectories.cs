@@ -33,7 +33,9 @@ namespace clReflect_automation
         public static string GetAdditionalPaths()
         {
 
+#if DEBUG
             Console.WriteLine("Detecting Additional Directories..");
+#endif
 
             string ItemDefinitionGroup_pattern = @"<ItemDefinitionGroup(.*?)<\/ItemDefinitionGroup>";
             Regex ItemDefinitionGroup_rgx = new Regex(ItemDefinitionGroup_pattern, RegexOptions.Singleline);
@@ -90,7 +92,10 @@ namespace clReflect_automation
                             sb.Append(parsedAdditionalPath);
                             sb.Append(@" ");
 
+#if DEBUG
                             Console.WriteLine(parsedAdditionalPath);
+#endif
+
                         }
                     }
                     sb.Remove(sb.Length - 1, 1);

@@ -253,16 +253,23 @@ namespace clReflect_automation
             {
                 if (sourceFiles[i] != "")
                 {
-                    List<String> targetSourceFileDependencyFileList = SourceDependencyFileHelper.GetSourceFileDependencyList(sourceFiles[i]);
+                    string clScanOutputPath = DirectoryHelper.GetclScanOutputPath(sourceFiles[i]);
+                    clscanOutPutFiles.Add(clScanOutputPath); // Even if source file isn't recompiled, it still need remerged and reexported
 
-                    clScanParameter _clScanParameter = new clScanParameter();
-                    _clScanParameter.sourceFilePath = sourceFiles[i];
-                    _clScanParameter.outputFilePath = DirectoryHelper.GetclScanOutputPath(sourceFiles[i]);
-                    _clScanParameter.additionalDirectories = additionalDirectories;
+                    if (ReflectionDataRegenreationSolver.CheckIsSourceFileRequireRegeneration(sourceFiles[i]) == true)
+                    {
+                        clScanParameter _clScanParameter = new clScanParameter();
+                        _clScanParameter.sourceFilePath = sourceFiles[i];
+                        _clScanParameter.outputFilePath = clScanOutputPath;
+                        _clScanParameter.additionalDirectories = additionalDirectories;
 
-                    clscanOutPutFiles.Add(_clScanParameter.outputFilePath);
+                        clscanOutPutFiles.Add(_clScanParameter.outputFilePath);
 
-                    clScan_internal(_clScanParameter, i , sourceFiles.Count);
+                        Console.WriteLine(String.Format("\"{0}\" require regenerating reflection data ( *.csv file )", sourceFiles[i]).ToString());
+                        clScan_internal(_clScanParameter, i, sourceFiles.Count);
+
+                        Console.WriteLine();
+                    }
 
 
                 }
