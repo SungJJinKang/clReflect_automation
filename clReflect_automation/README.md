@@ -19,4 +19,8 @@ Nuget Console
 
 Get-Project clReflect_automation | Install-Package Conari          
 Get-Project clReflect_automation | Install-Package DllExport        
-Get-Project clReflect_automation | Install-Package Newtonsoft.Json      
+Get-Project clReflect_automation | Install-Package Newtonsoft.Json     
+
+## Roadmap
+
+- Optimization ( clScan is too slow... Can apply multithread? )
