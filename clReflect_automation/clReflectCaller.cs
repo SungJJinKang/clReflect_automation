@@ -253,7 +253,7 @@ namespace clReflect_automation
             {
                 if (sourceFiles[i] != "")
                 {
-                    var a = SourceDependencyHelper.GetSourceFileDependencyList(sourceFiles[i]);
+                    List<String> targetSourceFileDependencyFileList = SourceDependencyFileHelper.GetSourceFileDependencyList(sourceFiles[i]);
 
                     clScanParameter _clScanParameter = new clScanParameter();
                     _clScanParameter.sourceFilePath = sourceFiles[i];

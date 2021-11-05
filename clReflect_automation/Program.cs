@@ -82,10 +82,9 @@ namespace clReflect_automation
             StringBuilder sb = new StringBuilder();
             if (Program.TARGET_PATFORM == "x64")
             {
-
-                sb.Append(@"-D_WIN64 ");
-                sb.Append(@"-D__LP64__ ");
-                sb.Append(@"-m64 ");
+                sb.Append("-D_WIN64 ");
+                sb.Append("-D__LP64__ ");
+                sb.Append("-m64 ");
             }
             else
             {
