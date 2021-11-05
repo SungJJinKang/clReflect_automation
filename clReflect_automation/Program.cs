@@ -32,6 +32,9 @@ namespace clReflect_automation
         public static string CL_MERGE_FILE_PATH { get { return __CL_MERGE_FILE_PATH; } }
 
         private static string __DEPENDENCY_FILES_FOLDER = "";
+        /// <summary>
+        /// end with '\\'
+        /// </summary>
         public static string DEPENDENCY_FILES_FOLDER { get { return __DEPENDENCY_FILES_FOLDER; } }
 
         private static string __ADDITIONAL_COMPILER_OPTION = "";
@@ -68,6 +71,11 @@ namespace clReflect_automation
                 if(args[i].StartsWith("-SD"))
                 {
                     __DEPENDENCY_FILES_FOLDER = args[i].Substring(3);
+                    if(__DEPENDENCY_FILES_FOLDER.EndsWith("\\") == false)
+                    {
+                        __DEPENDENCY_FILES_FOLDER += "\\";
+                    }
+
                     args[i] = "";
                     break;
                 }

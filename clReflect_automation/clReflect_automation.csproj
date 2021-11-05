@@ -87,13 +87,16 @@
     <Compile Include="DLLHelper.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="ExportDatabaseDirectoryList.cs" />
+    <Compile Include="FileModifiedDateManager.cs" />
     <Compile Include="ParseAdditionalDirectories.cs" />
     <Compile Include="ParseSourceFileDirectories.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceDependencyHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Conari" Version="1.5.0" />
@@ -102,6 +105,9 @@
       <Version>1.7.4</Version>
       <Visible>false</Visible>
       <Wz>1</Wz>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

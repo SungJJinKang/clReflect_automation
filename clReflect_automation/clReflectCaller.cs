@@ -182,6 +182,10 @@ namespace clReflect_automation
             sb.Append(' ');
             sb.Append(Program.ADDITIONAL_COMPILER_OPTION);
 
+#if DEBUG
+            sb.Append(' ');
+            sb.Append(Program.DEFAULT_COMPILER_DEBUG_LOG_OPTION);
+#endif
 
 
 
@@ -255,6 +259,7 @@ namespace clReflect_automation
             {
                 if (sourceFiles[i] != "")
                 {
+                    var a = SourceDependencyHelper.GetSourceFileDependencyList(sourceFiles[i]);
 
                     clScanParameter _clScanParameter = new clScanParameter();
                     _clScanParameter.sourceFilePath = sourceFiles[i];
