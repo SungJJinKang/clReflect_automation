@@ -11,6 +11,13 @@ namespace clReflect_automation
 {
     class SourceDependencyHelper
     {
+        public enum eSourceDependencyFileType
+        { 
+            MAKEFILE_DEPENDENCY, // .d
+            VISUAL_STUDIO_SOURCE_DEPENDENCIES // visual studio source dependency
+        }
+
+
         private static Dictionary<String, List<String>> SourceFileDependencyList = new Dictionary<string, List<string>>();
 
         /// <summary>
@@ -19,7 +26,7 @@ namespace clReflect_automation
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <returns></returns>
-        private static String GetConvertSourceFilePathToSourceFileDependencyFile(in string sourceFilePath)
+        private static String ConvertSourceFilePathToSourceFileDependencyFile(in string sourceFilePath)
         {
             if(Program.DEPENDENCY_FILES_FOLDER.Length == 0 || Program.DEPENDENCY_FILES_FOLDER.Length == 1)
             {
@@ -44,7 +51,7 @@ namespace clReflect_automation
         /// <returns></returns>
         private static List<String> ParseSourceFileDependencyFile(in string sourceFilePath)
         {
-            String SourceFileDependencyFilePath = GetConvertSourceFilePathToSourceFileDependencyFile(sourceFilePath);
+            String SourceFileDependencyFilePath = ConvertSourceFilePathToSourceFileDependencyFile(sourceFilePath);
 
             List<String> dependencyFilePathList;
 
@@ -69,6 +76,19 @@ namespace clReflect_automation
             }
 
             return SourceFileDependencyList[sourceFilePath];
+        }
+
+        public static bool GetIsDependencyFolderEmpty(in eSourceDependencyFileType dependencyFileType)
+        {
+            if(dependencyFileType == eSourceDependencyFileType.VISUAL_STUDIO_SOURCE_DEPENDENCIES)
+            {
+                return Directory.GetFiles(Program.DEPENDENCY_FILES_FOLDER, "*.json", SearchOption.TopDirectoryOnly).Length > 0;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

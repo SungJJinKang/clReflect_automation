@@ -41,8 +41,6 @@ namespace clReflect_automation
         public static string ADDITIONAL_COMPILER_OPTION { get { return __ADDITIONAL_COMPILER_OPTION; } }
 
 
-        public const string DEFAULT_COMPILER_DEBUG_LOG_OPTION = "-v";
-
         public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
        
         public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";

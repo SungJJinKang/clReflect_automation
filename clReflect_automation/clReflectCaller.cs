@@ -182,12 +182,6 @@ namespace clReflect_automation
             sb.Append(' ');
             sb.Append(Program.ADDITIONAL_COMPILER_OPTION);
 
-#if DEBUG
-            sb.Append(' ');
-            sb.Append(Program.DEFAULT_COMPILER_DEBUG_LOG_OPTION);
-#endif
-
-
 
 
             //sb.Append(" -MD"); // clangtooling이 dependency file 관련된 argument를 무시하는 옵션을 강제로 넣는다. https://intel.github.io/llvm-docs/clang_doxygen/classclang_1_1tooling_1_1StandaloneToolExecutor.html
