@@ -10,10 +10,14 @@ namespace clReflect_automation
 {
     class ExceptionHelper
     {
+        private static object ExceptionHelperLockObj = new object();
+
         public static void ShowExceptionMessageBox(Exception e)
         {
+            Monitor.Enter(ExceptionHelperLockObj);
+
             StringBuilder errorMessage = new StringBuilder();
-            
+
             errorMessage.Append(string.Format("[ {0:yyyy-MM-dd hh:mm s} ] Application Name", DateTime.Now));
             errorMessage.Append("Module : " + e.Source);
             errorMessage.Append('\n');
@@ -23,12 +27,12 @@ namespace clReflect_automation
             }
 
             MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
+
+            Monitor.Exit(ExceptionHelperLockObj);
         }
 
         public static void ShowExceptionMessageBox(UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
-            StringBuilder errorMessage = new StringBuilder();
-
             if(unhandledExceptionEventArgs != null)
             {
                 if(unhandledExceptionEventArgs.ExceptionObject != null)
@@ -44,8 +48,6 @@ namespace clReflect_automation
 
         public static void ShowExceptionMessageBox(ThreadExceptionEventArgs threadExceptionEventArgs)
         {
-            StringBuilder errorMessage = new StringBuilder();
-
             if (threadExceptionEventArgs != null)
             {
                 if (threadExceptionEventArgs.Exception != null)

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace clReflect_automation
@@ -118,6 +119,11 @@ namespace clReflect_automation
 
         public static void clMerge(in List<string> clScanOutputFilePathes)
         {
+            if(clScanOutputFilePathes.Count == 0)
+            {
+                return;
+            }
+
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
