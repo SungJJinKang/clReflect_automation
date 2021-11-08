@@ -141,6 +141,12 @@ namespace clReflect_automation
                 }
 
                 List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories();
+               
+                if(SourceFileDirectories.Count == 0)
+                {
+                    return 0;
+                }
+                
                 string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
 
                 List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);

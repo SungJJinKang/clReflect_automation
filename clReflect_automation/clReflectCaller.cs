@@ -119,6 +119,11 @@ namespace clReflect_automation
 
         public static void clMerge(in List<string> clScanOutputFilePathes)
         {
+            if(clScanOutputFilePathes.Count == 0)
+            {
+                return;
+            }
+
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -197,7 +202,7 @@ namespace clReflect_automation
             public string arguments;
         }
 
-        private static Mutex clscanMutex = new Mutex();
+        private static object clscanLockObj = new object();
         private static void clScan_internal(in clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
         {
             
@@ -227,9 +232,9 @@ namespace clReflect_automation
 
             if (result != 0)
             {
-                clscanMutex.WaitOne();
+                Monitor.Enter(clscanLockObj);
                 MessageBox.Show(String.Format("Fail to clscan file ( Error Code : {0} )", result), "FAIL clscan"); // fails here
-                clscanMutex.ReleaseMutex();
+                Monitor.Exit(clscanLockObj);
             }
             else
             {
@@ -250,9 +255,7 @@ namespace clReflect_automation
         static void clscan_multithread
         (
             in List<string> sourceFilePathList,
-            in List<string> clscanOutPutFilePathList,
             in List<clScanParameter> clscanParameterList,
-            in string additionalDirectories,
             ref int currentSourceFileCount, 
             ref int finishedSourceFileCount,
             in int totalSourceFileCount
@@ -307,8 +310,6 @@ namespace clReflect_automation
 
             List<string> clscanRegeneratedSourceFilePathes = new List<string>();
             clscanRegeneratedSourceFilePathes.Capacity = sourceFilePathList.Count;
-            List<string> clscanRegeneratedOutPutFiles = new List<string>();
-            clscanRegeneratedOutPutFiles.Capacity = clscanOutPutFiles.Count;
             List<clScanParameter> clscanRegeneratedSourceFileParameterList = new List<clScanParameter>();
             clscanRegeneratedSourceFileParameterList.Capacity = sourceFilePathList.Count;
 
@@ -320,7 +321,6 @@ namespace clReflect_automation
                 if (ReflectionDataRegenreationSolver.CheckIsSourceFileRequireRegeneration(sourceFilePathList[currentSourceFileIndex]) == true)
                 {
                     clscanRegeneratedSourceFilePathes.Add(sourceFilePathList[currentSourceFileIndex]);
-                    clscanRegeneratedOutPutFiles.Add(clscanOutPutFiles[currentSourceFileIndex]);
 
                     clScanParameter _clScanParameter = new clScanParameter();
                     _clScanParameter.sourceFilePath = sourceFilePathList[currentSourceFileIndex];
@@ -337,15 +337,19 @@ namespace clReflect_automation
 
             List<Thread> threadList = new List<Thread>();
 
+            currentSourceFileCount++;
+            finishedSourceFileCount++;
+
+            clScan_internal(clscanRegeneratedSourceFileParameterList[0], 0, sourceFilePathList.Count);
+            //https://reviews.llvm.org/D99652#2661979
+
             for (int i = 0; i < MAX_CLSCAN_THREAD_COUNT; i++)
             {
                 Thread thread = new Thread(() 
                     => clscan_multithread
                         (
                         clscanRegeneratedSourceFilePathes,
-                        clscanRegeneratedOutPutFiles,
                         clscanRegeneratedSourceFileParameterList,
-                        additionalDirectories,
                         ref currentSourceFileCount,
                         ref finishedSourceFileCount,
                         totalRegeneratedSourceFileCount
@@ -357,7 +361,7 @@ namespace clReflect_automation
                 threadList.Add(thread);
             }
 
-            while(finishedSourceFileCount < sourceFilePathList.Count)
+            while(finishedSourceFileCount < totalRegeneratedSourceFileCount)
             {
                 Thread.Sleep(2000);
             }

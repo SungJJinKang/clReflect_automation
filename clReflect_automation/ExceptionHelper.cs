@@ -10,11 +10,11 @@ namespace clReflect_automation
 {
     class ExceptionHelper
     {
-        private static Mutex ExceptionHelperMutex = new Mutex();
+        private static object ExceptionHelperLockObj = new object();
 
         public static void ShowExceptionMessageBox(Exception e)
         {
-            ExceptionHelperMutex.WaitOne();
+            Monitor.Enter(ExceptionHelperLockObj);
 
             StringBuilder errorMessage = new StringBuilder();
 
@@ -28,7 +28,7 @@ namespace clReflect_automation
 
             MessageBox.Show(errorMessage.ToString(), "Exception!!!!"); // fails here
 
-            ExceptionHelperMutex.ReleaseMutex();
+            Monitor.Exit(ExceptionHelperLockObj);
         }
 
         public static void ShowExceptionMessageBox(UnhandledExceptionEventArgs unhandledExceptionEventArgs)
