@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "qc8ENN9wnPFZrcWjniafG38FUDv+JyF1fziqpz+kVy+axwiTFJjkZMwVOxuC5LntwqEQ2tzD6CGsFPyuBiSFBw==",
+  "dgSpecHash": "+oVCizFrRWcPkvEornaFCvu1F3F0Ln/TSx0506MO4XdYqTmliKOdO0ou+QV7c7+isf866cV/PYkebvFOnJOSbw==",
   "success": true,
   "projectFilePath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kmsjk\\.nuget\\packages\\conari\\1.5.0\\conari.1.5.0.nupkg.sha512",
-    "C:\\Users\\kmsjk\\.nuget\\packages\\dllexport\\1.7.4\\dllexport.1.7.4.nupkg.sha512"
+    "C:\\Users\\kmsjk\\.nuget\\packages\\dllexport\\1.7.4\\dllexport.1.7.4.nupkg.sha512",
+    "C:\\Users\\kmsjk\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
   ],
   "logs": []
 }

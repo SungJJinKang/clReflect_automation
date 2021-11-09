@@ -249,7 +249,8 @@ namespace clReflect_automation
             in List<clScanParameter> clscanParameterList,
             ref int currentSourceFileCount, 
             ref int finishedSourceFileCount,
-            in int totalSourceFileCount
+            in int totalSourceFileCount,
+            in int threadIndex
         )
         {
             while (true)
@@ -272,8 +273,11 @@ namespace clReflect_automation
 
                 Console.WriteLine
                     (
-                    "Success to clScan! ( output File Path :  {0}, Completion : {1} / {2} )",
-                    clscanParameterList[currentSourceFileIndex].outputFilePath, currentFinishedSourceFileIndex.ToString(), totalSourceFileCount.ToString()
+                    "Success to clScan! ( Thread Index : {0} ) ( output File Path :  {1}, Completion : {2} / {3} )",
+                    threadIndex.ToString(),
+                    clscanParameterList[currentSourceFileIndex].outputFilePath, 
+                    currentFinishedSourceFileIndex.ToString(), 
+                    totalSourceFileCount.ToString()
                     );
 
                 if (currentFinishedSourceFileIndex >= totalSourceFileCount)
@@ -349,6 +353,7 @@ namespace clReflect_automation
 
                 for (int i = 0; i < MAX_CLSCAN_THREAD_COUNT && i < clscanRegeneratedSourceFilePathes.Count; i++)
                 {
+                    int threadIndex = i;
                     Thread thread = new Thread(()
                         => clscan_multithread
                             (
@@ -356,7 +361,8 @@ namespace clReflect_automation
                             clscanRegeneratedSourceFileParameterList,
                             ref currentSourceFileCount,
                             ref finishedSourceFileCount,
-                            clscanRegeneratedSourceFilePathes.Count
+                            clscanRegeneratedSourceFilePathes.Count,
+                            threadIndex
                             )
                         );
 
