@@ -151,7 +151,6 @@ namespace clReflect_automation
 
                 List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);
                 clReflectCaller.clMerge(clScanOutFilePaths);
-                ExportDatabaseDirectoryList.WriteDatabasePathsListToText(clScanOutFilePaths);
 
                 clReflectCaller.clExport();
 
