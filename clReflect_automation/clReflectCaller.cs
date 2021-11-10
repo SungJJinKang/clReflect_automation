@@ -237,7 +237,7 @@ namespace clReflect_automation
 
 
 
-        public static int MAX_CLSCAN_THREAD_COUNT = Math.Min(8, Environment.ProcessorCount);
+        public static int MAX_CLSCAN_THREAD_COUNT = Math.Min(4, Environment.ProcessorCount);
 
         static void clscan_multithread
         (
@@ -380,7 +380,7 @@ namespace clReflect_automation
 
                 while (finishedSourceFileCount < clscanRegeneratedSourceFilePathes.Count)
                 {
-                    Thread.Sleep(2000);
+                    Thread.Sleep(3000);
                 }
 
                 foreach (Thread thread in threadList)
