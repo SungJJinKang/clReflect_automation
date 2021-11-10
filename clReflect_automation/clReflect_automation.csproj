@@ -144,6 +144,12 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /d /f "$(ProjectDir)clexport.dll" "$(OutDir)"
 xcopy /y /d /f "$(ProjectDir)clmerge.dll" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clscan.dll" "$(OutDir)"</PostBuildEvent>
+xcopy /y /d /f "$(ProjectDir)clscan.dll" "$(OutDir)"
+xcopy /y /d /f "$(ProjectDir)clexport.map" "$(OutDir)"
+xcopy /y /d /f "$(ProjectDir)clmerge.map" "$(OutDir)"
+xcopy /y /d /f "$(ProjectDir)clscan.map" "$(OutDir)"
+xcopy /y /d /f "$(ProjectDir)clexport.pdb" "$(OutDir)"
+xcopy /y /d /f "$(ProjectDir)clmerge.pdb" "$(OutDir)"
+xcopy /y /d /f "$(ProjectDir)clscan.pdb" "$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
