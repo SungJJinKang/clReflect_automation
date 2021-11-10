@@ -13,14 +13,10 @@ This library support using [clReflect](https://github.com/Celtoys/clReflect) wit
 	2.2 Reflection Data is regenerated only when it require        
 3. Merge it all to one File
 
-## Setting
+## How-To Install
 
 Nuget Console           
 
 Get-Project clReflect_automation | Install-Package Conari          
 Get-Project clReflect_automation | Install-Package DllExport        
 Get-Project clReflect_automation | Install-Package Newtonsoft.Json     
-
-## Roadmap
-
-- Optimization ( clScan is too slow... Can apply multithread? )
