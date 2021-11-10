@@ -390,6 +390,7 @@ namespace clReflect_automation
 
                 DLLHelper.UnLoadDLLFromConariL(ref clScanConariL);
 
+                Console.Out.Flush();
                 Console.WriteLine("clscan is finished!!");
 
 
