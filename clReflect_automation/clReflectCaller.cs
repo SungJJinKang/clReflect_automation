@@ -203,7 +203,7 @@ namespace clReflect_automation
         }
 
         private static object clscanLockObj = new object();
-        private static void clScan_internal(in clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
+        private static int clScan_internal(in clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
         {
             
             int result = 1;
@@ -230,13 +230,9 @@ namespace clReflect_automation
                 ExceptionHelper.ShowExceptionMessageBox(e);
             }
 
-            if (result != 0)
-            {
-                Monitor.Enter(clscanLockObj);
-                MessageBox.Show(String.Format("Fail to clscan file ( Error Code : {0} )", result), "FAIL clscan"); // fails here
-                Monitor.Exit(clscanLockObj);
-            }
+            Console.Out.Flush();
 
+            return result;
         }
 
 
@@ -261,24 +257,35 @@ namespace clReflect_automation
                     break;
                 }
 
+                int result = 1;
 
                 if (sourceFilePathList[currentSourceFileIndex] != "")
                 {
                     Console.WriteLine(String.Format("\"{0}\" require regenerating reflection data ( *.csv file )", sourceFilePathList[currentSourceFileIndex]).ToString());
-                    clScan_internal(clscanParameterList[currentSourceFileIndex], currentSourceFileIndex, sourceFilePathList.Count);
+                    result = clScan_internal(clscanParameterList[currentSourceFileIndex], currentSourceFileIndex, sourceFilePathList.Count);
                 }
 
 
                 int currentFinishedSourceFileIndex = Interlocked.Increment(ref finishedSourceFileCount);
 
-                Console.WriteLine
+                if(result == 0)
+                {
+                    Console.WriteLine
                     (
                     "Success to clScan! ( Thread Index : {0} ) ( output File Path :  {1}, Completion : {2} / {3} )",
                     threadIndex.ToString(),
-                    clscanParameterList[currentSourceFileIndex].outputFilePath, 
-                    currentFinishedSourceFileIndex.ToString(), 
+                    clscanParameterList[currentSourceFileIndex].outputFilePath,
+                    currentFinishedSourceFileIndex.ToString(),
                     totalSourceFileCount.ToString()
                     );
+                }
+                else 
+                {
+                    Monitor.Enter(clscanLockObj);
+                    MessageBox.Show(String.Format("Fail to clscan file ( Error Code : {0} )", result), "FAIL clscan"); // fails here
+                    Monitor.Exit(clscanLockObj);
+                }
+                
 
                 if (currentFinishedSourceFileIndex >= totalSourceFileCount)
                 {
