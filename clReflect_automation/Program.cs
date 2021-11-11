@@ -41,13 +41,13 @@ namespace clReflect_automation
         public static string ADDITIONAL_COMPILER_OPTION { get { return __ADDITIONAL_COMPILER_OPTION; } }
 
 
-        public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
-       
-        public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
+        public static readonly string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
 
-        public const string DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
+        public static readonly string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
-        private const string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
+        public static readonly string DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
+
+        private static readonly string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
 
         static private void Configure(string[] args)
         {
@@ -141,11 +141,16 @@ namespace clReflect_automation
                 }
 
                 List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories();
+               
+                if(SourceFileDirectories.Count == 0)
+                {
+                    return 0;
+                }
+                
                 string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
 
                 List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);
                 clReflectCaller.clMerge(clScanOutFilePaths);
-                ExportDatabaseDirectoryList.WriteDatabasePathsListToText(clScanOutFilePaths);
 
                 clReflectCaller.clExport();
 

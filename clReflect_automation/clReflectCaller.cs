@@ -167,15 +167,9 @@ namespace clReflect_automation
             Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
         }
 
-        private struct clScanParameter
-        {
-            public string sourceFilePath;
-            public string outputFilePath;
-            public string additionalDirectories;
+        
 
-        }
-
-        private static String GetClScanArgv(clScanParameter _clScanParameter)
+        private static void GenerateClScanArguments(ref clScanParameter _clScanParameter)
         {
             var sb = new System.Text.StringBuilder();
             sb.Append(_clScanParameter.sourceFilePath);
@@ -188,7 +182,7 @@ namespace clReflect_automation
             sb.Append(' ');
             sb.Append(Program.ADDITIONAL_COMPILER_OPTION);
 
-
+            _clScanParameter.arguments = sb.ToString();
 
             //sb.Append(" -MD"); // clangtooling이 dependency file 관련된 argument를 무시하는 옵션을 강제로 넣는다. https://intel.github.io/llvm-docs/clang_doxygen/classclang_1_1tooling_1_1StandaloneToolExecutor.html
             /*
@@ -198,25 +192,29 @@ namespace clReflect_automation
             sb.Append(Path.GetFileNameWithoutExtension(_clScanParameter.sourceFilePath));
             sb.Append(".mk");
             */
-            return sb.ToString();
         }
 
-        
-       
+        private class clScanParameter
+        {
+            public string sourceFilePath;
+            public string outputFilePath;
+            public string additionalDirectories;
+            public string arguments;
+        }
 
-        private static void clScan_internal(clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
+        private static object clscanLockObj = new object();
+        private static int clScan_internal(in clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
         {
             
             int result = 1;
 
-            DLLHelper.LoadDLLToConariL(ref clScanConariL, Program.CL_SCAN_FILE_PATH);
+           
             try
             {
                 if (clScanConariL != null)
                 {
-                    string arvs = GetClScanArgv(_clScanParameter);
-                    NativeString<CharPtr> unmanagedStringArgv = new NativeString<CharPtr>(arvs);
-
+                    NativeString<CharPtr> unmanagedStringArgv = new NativeString<CharPtr>(_clScanParameter.arguments);
+             
                     Console.WriteLine("Start to clScan ( Target SourceFile File Path : {0} )", _clScanParameter.sourceFilePath);
                     result = clScanConariL.DLR.c_clscan<int>(unmanagedStringArgv);
 
@@ -232,61 +230,175 @@ namespace clReflect_automation
                 ExceptionHelper.ShowExceptionMessageBox(e);
             }
 
-            if (result != 0)
-            {
-                MessageBox.Show(String.Format("Fail to clscan file ( Error Code : {0} )", result), "FAIL clscan"); // fails here
-            }
-            else
-            {
-                Console.WriteLine
-                    (
-                    "Success to clScan! ( output File Path :  {0}, Completion : {1} / {2} )", 
-                    _clScanParameter.outputFilePath, (completedSourceFileCount + 1).ToString(), totalSourceFileCount.ToString()
-                    );
-            }
+            Console.Out.Flush();
 
-
+            return result;
         }
 
-        public static List<string> clScanSourceFiles(in List<string> sourceFiles, in string additionalDirectories)
+
+
+        public static int MAX_CLSCAN_THREAD_COUNT = Math.Min(4, Environment.ProcessorCount);
+
+        static void clscan_multithread
+        (
+            in List<string> sourceFilePathList,
+            in List<clScanParameter> clscanParameterList,
+            ref int currentSourceFileCount, 
+            ref int finishedSourceFileCount,
+            in int totalSourceFileCount,
+            in int threadIndex
+        )
         {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            List<string> clscanOutPutFiles = new List<string>();
-
-            for (int i = 0; i < sourceFiles.Count; i++)
+            while (true)
             {
-                if (sourceFiles[i] != "")
+                int currentSourceFileIndex = Interlocked.Increment(ref currentSourceFileCount);
+                if(currentSourceFileIndex >= totalSourceFileCount)
                 {
-                    string clScanOutputPath = DirectoryHelper.GetclScanOutputPath(sourceFiles[i]);
-                    clscanOutPutFiles.Add(clScanOutputPath); // Even if source file isn't recompiled, it still need remerged and reexported
+                    break;
+                }
 
-                    if (ReflectionDataRegenreationSolver.CheckIsSourceFileRequireRegeneration(sourceFiles[i]) == true)
-                    {
-                        clScanParameter _clScanParameter = new clScanParameter();
-                        _clScanParameter.sourceFilePath = sourceFiles[i];
-                        _clScanParameter.outputFilePath = clScanOutputPath;
-                        _clScanParameter.additionalDirectories = additionalDirectories;
+                int result = 1;
 
-                        clscanOutPutFiles.Add(_clScanParameter.outputFilePath);
+                if (sourceFilePathList[currentSourceFileIndex] != "")
+                {
+                    Console.WriteLine(String.Format("\"{0}\" require regenerating reflection data ( *.csv file )", sourceFilePathList[currentSourceFileIndex]).ToString());
+                    result = clScan_internal(clscanParameterList[currentSourceFileIndex], currentSourceFileIndex, sourceFilePathList.Count);
+                }
 
-                        Console.WriteLine(String.Format("\"{0}\" require regenerating reflection data ( *.csv file )", sourceFiles[i]).ToString());
-                        clScan_internal(_clScanParameter, i, sourceFiles.Count);
 
-                        Console.WriteLine();
-                    }
+                int currentFinishedSourceFileIndex = Interlocked.Increment(ref finishedSourceFileCount);
 
+                if(result == 0)
+                {
+                    Console.WriteLine
+                    (
+                    "Success to clScan! ( Thread Index : {0} ) ( output File Path :  {1}, Completion : {2} / {3} )",
+                    threadIndex.ToString(),
+                    clscanParameterList[currentSourceFileIndex].outputFilePath,
+                    currentFinishedSourceFileIndex.ToString(),
+                    totalSourceFileCount.ToString()
+                    );
+                }
+                else 
+                {
+                    Monitor.Enter(clscanLockObj);
+                    MessageBox.Show(String.Format("Fail to clscan file ( Error Code : {0} )", result), "FAIL clscan"); // fails here
+                    Monitor.Exit(clscanLockObj);
+                }
+                
+
+                if (currentFinishedSourceFileIndex >= totalSourceFileCount)
+                {
+                    break;
+                }
+            }
+           
+        }
+
+        private static List<string> GenerateClScanOutputFilePathList(in List<string> sourceFilePathList)
+        {
+            List<string> clscanOutPutFiles = new List<string>();
+            clscanOutPutFiles.Capacity = sourceFilePathList.Count;
+
+            for (int i = 0; i < sourceFilePathList.Count; i++)
+            {
+                string clScanOutputPath = DirectoryHelper.GetclScanOutputPath(sourceFilePathList[i]);
+                clscanOutPutFiles.Add(clScanOutputPath);
+            }
+            return clscanOutPutFiles;
+        }
+
+        public static List<string> clScanSourceFiles(List<string> sourceFilePathList, string additionalDirectories)
+        {
+            List<string> clscanOutPutFiles = GenerateClScanOutputFilePathList(sourceFilePathList);
+
+            List<string> clscanRegeneratedSourceFilePathes = new List<string>();
+            clscanRegeneratedSourceFilePathes.Capacity = sourceFilePathList.Count;
+            List<clScanParameter> clscanRegeneratedSourceFileParameterList = new List<clScanParameter>();
+            clscanRegeneratedSourceFileParameterList.Capacity = sourceFilePathList.Count;
+
+            int currentSourceFileCount = -1;
+            int finishedSourceFileCount = 0;
+
+            for(int currentSourceFileIndex = 0; currentSourceFileIndex < sourceFilePathList.Count; currentSourceFileIndex++)
+            {
+                if (ReflectionDataRegenreationSolver.CheckIsSourceFileRequireRegeneration(sourceFilePathList[currentSourceFileIndex]) == true)
+                {
+                    clscanRegeneratedSourceFilePathes.Add(sourceFilePathList[currentSourceFileIndex]);
+
+                    clScanParameter _clScanParameter = new clScanParameter();
+                    _clScanParameter.sourceFilePath = sourceFilePathList[currentSourceFileIndex];
+                    _clScanParameter.outputFilePath = clscanOutPutFiles[currentSourceFileIndex];
+                    _clScanParameter.additionalDirectories = additionalDirectories;
+                    GenerateClScanArguments(ref _clScanParameter);
+
+                    clscanRegeneratedSourceFileParameterList.Add(_clScanParameter);
 
                 }
             }
 
-            Console.WriteLine("clscan is finished!!");
+            Console.WriteLine
+                    (
+                    "{0} Source Files require reflection data regeneration",
+                    clscanRegeneratedSourceFilePathes.Count.ToString()
+                    );
 
-            DLLHelper.UnLoadDLLFromConariL(ref clScanConariL);
+            if (clscanRegeneratedSourceFilePathes.Count > 0)
+            {
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
 
-            stopWatch.Stop();
-            Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
+                Console.WriteLine
+                        (
+                        "clScan Thread Count : {0}",
+                        MAX_CLSCAN_THREAD_COUNT.ToString()
+                        );
+
+                DLLHelper.LoadDLLToConariL(ref clScanConariL, Program.CL_SCAN_FILE_PATH);
+
+                List<Thread> threadList = new List<Thread>();
+
+                for (int i = 0; i < MAX_CLSCAN_THREAD_COUNT && i < clscanRegeneratedSourceFilePathes.Count; i++)
+                {
+                    int threadIndex = i;
+                    Thread thread = new Thread(()
+                        => clscan_multithread
+                            (
+                            clscanRegeneratedSourceFilePathes,
+                            clscanRegeneratedSourceFileParameterList,
+                            ref currentSourceFileCount,
+                            ref finishedSourceFileCount,
+                            clscanRegeneratedSourceFilePathes.Count,
+                            threadIndex
+                            )
+                        );
+
+                    thread.Start();
+
+                    threadList.Add(thread);
+                }
+
+                while (finishedSourceFileCount < clscanRegeneratedSourceFilePathes.Count)
+                {
+                    Thread.Sleep(3000);
+                }
+
+                foreach (Thread thread in threadList)
+                {
+                    thread.Join();
+                }
+
+                DLLHelper.UnLoadDLLFromConariL(ref clScanConariL);
+
+                Console.Out.Flush();
+                Console.WriteLine("clscan is finished!!");
+
+
+                stopWatch.Stop();
+                Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
+            }
+
+            
 
             return clscanOutPutFiles;
         }

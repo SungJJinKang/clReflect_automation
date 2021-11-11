@@ -8,6 +8,8 @@ namespace clReflect_automation
 {
     class ParseSourceFileDirectories
     {
+        public readonly static String COMPILE_TIME_GETTYPE_FILE_NAME_WORD = "compiletime_gettype";
+
         public static List<string> GetSourceFileDirectories()
         {
 #if DEBUG
@@ -28,6 +30,12 @@ namespace clReflect_automation
             for (int i = 0; i < SourceFileDirectories_matches.Count; i++)
             {
                 string sourceFileDirectory = SourceFileDirectories_matches[i].Groups[1].ToString();
+
+                if(sourceFileDirectory.Contains(COMPILE_TIME_GETTYPE_FILE_NAME_WORD) == true)
+                {
+                    continue;
+                }
+
                 sourceFileDirectory = sourceFileDirectory.Trim();
                 sourceFileDirectory.Replace("\n", "");
 
