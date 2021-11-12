@@ -49,6 +49,9 @@ namespace clReflect_automation
 
         private static readonly string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
 
+        private static string __ROOTCLASS_TYPENAME = "";
+        public static string ROOTCLASS_TYPENAME { get { return __ROOTCLASS_TYPENAME; } }
+
         static private void Configure(string[] args)
         {
             Program.__CL_SCAN_FILE_PATH = args[0].Trim();
@@ -68,11 +71,22 @@ namespace clReflect_automation
             {
                 if(args[i].StartsWith("-SD"))
                 {
-                    __DEPENDENCY_FILES_FOLDER = args[i].Substring(3);
-                    if(__DEPENDENCY_FILES_FOLDER.EndsWith("\\") == false)
+                    __DEPENDENCY_FILES_FOLDER = args[i].Substring("-SD".Length);
+                    if (__DEPENDENCY_FILES_FOLDER.EndsWith("\\") == false)
                     {
                         __DEPENDENCY_FILES_FOLDER += "\\";
                     }
+
+                    args[i] = "";
+                    break;
+                }
+            }
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].StartsWith("-ROOTCLASS_TYPENAME"))
+                {
+                    __ROOTCLASS_TYPENAME = args[i].Substring("-ROOTCLASS_TYPENAME".Length);
 
                     args[i] = "";
                     break;

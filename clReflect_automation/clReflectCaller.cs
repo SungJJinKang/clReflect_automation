@@ -22,7 +22,7 @@ namespace clReflect_automation
             string[] files = System.IO.Directory.GetFiles(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH), "*.map");
             if(files.Length > 0)
             {
-                mapFilePath = DirectoryHelper.GetFileDirectoryInProjectFolder(files[0]);
+                mapFilePath = files[0];
                 return true;
             }
             else
@@ -175,6 +175,11 @@ namespace clReflect_automation
             sb.Append(_clScanParameter.sourceFilePath);
             sb.Append(" --output ");
             sb.Append(_clScanParameter.outputFilePath);
+            if(Program.ROOTCLASS_TYPENAME != "")
+            {
+                sb.Append(" --rootClass_typeName ");
+                sb.Append(Program.ROOTCLASS_TYPENAME);
+            }
             sb.Append(" -- ");
             sb.Append(Program.DEFAULT_COMPILER_OPTION);
             sb.Append(' ');
