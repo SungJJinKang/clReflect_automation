@@ -242,7 +242,7 @@ namespace clReflect_automation
 
 
 
-        public static int MAX_CLSCAN_THREAD_COUNT = Math.Min(4, Environment.ProcessorCount);
+        public static int MAX_CLSCAN_THREAD_COUNT = Math.Min(4, Environment.ProcessorCount / 2);
 
         static void clscan_multithread
         (
