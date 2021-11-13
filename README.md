@@ -4,8 +4,10 @@ This library support using [clReflect](https://github.com/SungJJinKang/clReflect
 
 1. Analyze Project Build file ( CMakeLists.txt, *.vcxproj.... )
 2. Parse All Project source files ( *.cpp ) to Type info database file ( *.csv ) using clReflect with multiple threads ( stored at Project Build Folder )
-3. Export Type info database file to Binary, Memory-mapped database ( *.cppbin )  ( stored at Project Build Folder )
+3. Export Type info database file to Binary, Memory-mapped database ( *.cppbin )  ( stored at Project Build Folder )              
 
+[Example Video](https://youtu.be/KGihaYTzqG8)                    
+ 
 ## How To Use
 
 Nuget Console           
