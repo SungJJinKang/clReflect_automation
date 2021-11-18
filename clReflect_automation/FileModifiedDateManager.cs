@@ -9,9 +9,9 @@ namespace clReflect_automation
 {
     class FileModifiedDateManager
     {
-        private static Dictionary<String, DateTime> FileModifiedDateTimeCache = new Dictionary<string, DateTime>();
+        private Dictionary<String, DateTime> FileModifiedDateTimeCache = new Dictionary<string, DateTime>();
 
-        public static DateTime GetFileModifiedData(in string filePath)
+        public DateTime GetFileModifiedData(in string filePath)
         {
             DateTime fileModifiedDateTime;
 
@@ -28,7 +28,7 @@ namespace clReflect_automation
             return fileModifiedDateTime;
         }
 
-        public static bool CheckIsFileModified(in string filePath, in DateTime compareDate)
+        public bool CheckIsFileModified(in string filePath, in DateTime compareDate)
         {
             DateTime fileModifiedDate = GetFileModifiedData(filePath);
 

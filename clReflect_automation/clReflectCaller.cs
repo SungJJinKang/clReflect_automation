@@ -13,13 +13,13 @@ namespace clReflect_automation
 {
     class clReflectCaller
     {
-        private static ConariL clScanConariL = null;
-        private static ConariL clMergeConariL = null;
-        private static ConariL clExportConariL = null;
+        private ConariL clScanConariL = null;
+        private ConariL clMergeConariL = null;
+        private ConariL clExportConariL = null;
 
-        private static bool FindMapFileInProjectFolder(ref String mapFilePath)
+        private bool FindMapFileInProjectFolder(in Program.ConfigureData configureData, ref String mapFilePath)
         {
-            string[] files = System.IO.Directory.GetFiles(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH), "*.map");
+            string[] files = System.IO.Directory.GetFiles(Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH), "*.map");
             if(files.Length > 0)
             {
                 mapFilePath = files[0];
@@ -31,15 +31,15 @@ namespace clReflect_automation
             }
         }
 
-        private static string GetclExportArguments()
+        private string GetclExportArguments(in Program.ConfigureData configureData)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(DirectoryHelper.GetclMergeOutputPath());
+            sb.Append(DirectoryHelper.GetclMergeOutputPath(configureData));
             sb.Append(" -cpp ");
-            sb.Append(DirectoryHelper.GetclExportOutputPath());
+            sb.Append(DirectoryHelper.GetclExportOutputPath(configureData));
 
             String mapFilePath = "";
-            if(FindMapFileInProjectFolder(ref mapFilePath) == true)
+            if(FindMapFileInProjectFolder(configureData, ref mapFilePath) == true)
             {
                 sb.Append(" -map ");
                 sb.Append(mapFilePath);
@@ -54,19 +54,19 @@ namespace clReflect_automation
 
             return sb.ToString();
         }
-        public static void clExport()
+        public void clExport(in Program.ConfigureData configureData)
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
             int result = 1;
 
-            DLLHelper.LoadDLLToConariL(ref clExportConariL, Program.CL_EXPORT_FILE_PATH);
+            DLLHelper.LoadDLLToConariL(ref clExportConariL, configureData.CL_EXPORT_FILE_PATH);
             try
             {
                 if (clExportConariL != null)
                 {
-                    string arvs = GetclExportArguments();
+                    string arvs = GetclExportArguments(configureData);
                     NativeString<CharPtr> unmanagedStringArgv = new NativeString<CharPtr>(arvs);
 
                     result = clExportConariL.DLR.c_clexport<int>(unmanagedStringArgv);
@@ -91,19 +91,19 @@ namespace clReflect_automation
             }
             else
             {
-                Console.WriteLine("clExport Success!!! ( Exported Output File Path : {0} )", DirectoryHelper.GetclExportOutputPath());
+                Console.WriteLine("clExport Success!!! ( Exported Output File Path : {0} )", DirectoryHelper.GetclExportOutputPath(configureData));
             }
 
             stopWatch.Stop();
             Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
         }
 
-        private static string GetclMergeArguments(in List<string> clScanOutputFilePathes)
+        private string GetclMergeArguments(in Program.ConfigureData configureData, in List<string> clScanOutputFilePathes)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(DirectoryHelper.GetclMergeOutputPath());
+            sb.Append(DirectoryHelper.GetclMergeOutputPath(configureData));
             sb.Append(" -cpp_codegen ");
-            sb.Append(DirectoryHelper.GetFileDirectoryInProjectFolder(Program.DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME));
+            sb.Append(DirectoryHelper.GetFileDirectoryInProjectFolder(configureData, Program.ConfigureData.DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME));
             sb.Append(" ");
 
             for (int i = 0; i < clScanOutputFilePathes.Count; i++)
@@ -117,7 +117,7 @@ namespace clReflect_automation
             return sb.ToString();
         }
 
-        public static void clMerge(in List<string> clScanOutputFilePathes)
+        public void clMerge(in Program.ConfigureData configureData, in List<string> clScanOutputFilePathes)
         {
             if(clScanOutputFilePathes.Count == 0)
             {
@@ -129,13 +129,13 @@ namespace clReflect_automation
 
             int result = 1;
 
-            DLLHelper.LoadDLLToConariL(ref clMergeConariL, Program.CL_MERGE_FILE_PATH);
+            DLLHelper.LoadDLLToConariL(ref clMergeConariL, configureData.CL_MERGE_FILE_PATH);
 
             try
             {
                 if (clMergeConariL != null)
                 {
-                    string arvs = GetclMergeArguments(clScanOutputFilePathes);
+                    string arvs = GetclMergeArguments(configureData, clScanOutputFilePathes);
                     NativeString<CharPtr> unmanagedStringArgv = new NativeString<CharPtr>(arvs);
 
                     result = clMergeConariL.DLR.c_clmerge<int>(unmanagedStringArgv);
@@ -160,7 +160,7 @@ namespace clReflect_automation
             }
             else
             {
-                Console.WriteLine("clMerge Success!! ( Merged File Path : {0} )", DirectoryHelper.GetclMergeOutputPath());
+                Console.WriteLine("clMerge Success!! ( Merged File Path : {0} )", DirectoryHelper.GetclMergeOutputPath(configureData));
             }
 
             stopWatch.Stop();
@@ -169,23 +169,23 @@ namespace clReflect_automation
 
         
 
-        private static void GenerateClScanArguments(ref clScanParameter _clScanParameter)
+        private void GenerateClScanArguments(in Program.ConfigureData configureData, ref clScanParameter _clScanParameter)
         {
             var sb = new System.Text.StringBuilder();
             sb.Append(_clScanParameter.sourceFilePath);
             sb.Append(" --output ");
             sb.Append(_clScanParameter.outputFilePath);
-            if(Program.ROOTCLASS_TYPENAME != "")
+            if(configureData.ROOTCLASS_TYPENAME != null && configureData.ROOTCLASS_TYPENAME.Length > 0)
             {
                 sb.Append(" --rootClass_typeName ");
-                sb.Append(Program.ROOTCLASS_TYPENAME);
+                sb.Append(configureData.ROOTCLASS_TYPENAME);
             }
             sb.Append(" -- ");
-            sb.Append(Program.DEFAULT_COMPILER_OPTION);
+            sb.Append(Program.ConfigureData.DEFAULT_COMPILER_OPTION);
             sb.Append(' ');
             sb.Append(_clScanParameter.additionalDirectories);
             sb.Append(' ');
-            sb.Append(Program.ADDITIONAL_COMPILER_OPTION);
+            sb.Append(configureData.ADDITIONAL_COMPILER_OPTION);
 
             _clScanParameter.arguments = sb.ToString();
 
@@ -207,8 +207,8 @@ namespace clReflect_automation
             public string arguments;
         }
 
-        private static object clscanLockObj = new object();
-        private static int clScan_internal(in clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
+        private object clscanLockObj = new object();
+        private int clScan_internal(in clScanParameter _clScanParameter, in int completedSourceFileCount, in int totalSourceFileCount)
         {
             
             int result = 1;
@@ -242,9 +242,9 @@ namespace clReflect_automation
 
 
 
-        public static int MAX_CLSCAN_THREAD_COUNT = Math.Min(4, Environment.ProcessorCount / 2);
+        public int MAX_CLSCAN_THREAD_COUNT = Math.Min(4, Environment.ProcessorCount / 2);
 
-        static void clscan_multithread
+        void clscan_multithread
         (
             in List<string> sourceFilePathList,
             in List<clScanParameter> clscanParameterList,
@@ -300,22 +300,22 @@ namespace clReflect_automation
            
         }
 
-        private static List<string> GenerateClScanOutputFilePathList(in List<string> sourceFilePathList)
+        private List<string> GenerateClScanOutputFilePathList(in Program.ConfigureData configureData, in List<string> sourceFilePathList)
         {
             List<string> clscanOutPutFiles = new List<string>();
             clscanOutPutFiles.Capacity = sourceFilePathList.Count;
 
             for (int i = 0; i < sourceFilePathList.Count; i++)
             {
-                string clScanOutputPath = DirectoryHelper.GetclScanOutputPath(sourceFilePathList[i]);
+                string clScanOutputPath = DirectoryHelper.GetclScanOutputPath(configureData, sourceFilePathList[i]);
                 clscanOutPutFiles.Add(clScanOutputPath);
             }
             return clscanOutPutFiles;
         }
 
-        public static List<string> clScanSourceFiles(List<string> sourceFilePathList, string additionalDirectories)
+        public List<string> clScanSourceFiles(in Program.ConfigureData configureData, List<string> sourceFilePathList, string additionalDirectories)
         {
-            List<string> clscanOutPutFiles = GenerateClScanOutputFilePathList(sourceFilePathList);
+            List<string> clscanOutPutFiles = GenerateClScanOutputFilePathList(configureData, sourceFilePathList);
 
             List<string> clscanRegeneratedSourceFilePathes = new List<string>();
             clscanRegeneratedSourceFilePathes.Capacity = sourceFilePathList.Count;
@@ -325,9 +325,11 @@ namespace clReflect_automation
             int currentSourceFileCount = -1;
             int finishedSourceFileCount = 0;
 
-            for(int currentSourceFileIndex = 0; currentSourceFileIndex < sourceFilePathList.Count; currentSourceFileIndex++)
+            ReflectionDataRegenreationSolver _ReflectionDataRegenreationSolver = new ReflectionDataRegenreationSolver();
+
+            for (int currentSourceFileIndex = 0; currentSourceFileIndex < sourceFilePathList.Count; currentSourceFileIndex++)
             {
-                if (ReflectionDataRegenreationSolver.CheckIsSourceFileRequireRegeneration(sourceFilePathList[currentSourceFileIndex]) == true)
+                if (_ReflectionDataRegenreationSolver.CheckIsSourceFileRequireRegeneration(configureData, sourceFilePathList[currentSourceFileIndex]) == true)
                 {
                     clscanRegeneratedSourceFilePathes.Add(sourceFilePathList[currentSourceFileIndex]);
 
@@ -335,7 +337,7 @@ namespace clReflect_automation
                     _clScanParameter.sourceFilePath = sourceFilePathList[currentSourceFileIndex];
                     _clScanParameter.outputFilePath = clscanOutPutFiles[currentSourceFileIndex];
                     _clScanParameter.additionalDirectories = additionalDirectories;
-                    GenerateClScanArguments(ref _clScanParameter);
+                    GenerateClScanArguments(configureData, ref _clScanParameter);
 
                     clscanRegeneratedSourceFileParameterList.Add(_clScanParameter);
 
@@ -359,7 +361,7 @@ namespace clReflect_automation
                         MAX_CLSCAN_THREAD_COUNT.ToString()
                         );
 
-                DLLHelper.LoadDLLToConariL(ref clScanConariL, Program.CL_SCAN_FILE_PATH);
+                DLLHelper.LoadDLLToConariL(ref clScanConariL, configureData.CL_SCAN_FILE_PATH);
 
                 List<Thread> threadList = new List<Thread>();
 

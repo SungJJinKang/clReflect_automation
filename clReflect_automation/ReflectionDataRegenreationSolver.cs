@@ -9,12 +9,14 @@ namespace clReflect_automation
 {
     class ReflectionDataRegenreationSolver
     {
+        FileModifiedDateManager mFileModifiedDateManager = new FileModifiedDateManager();
+        SourceDependencyFileHelper mSourceDependencyFileHelper = new SourceDependencyFileHelper();
 
-        public static bool CheckIsSourceFileRequireRegeneration(in string sourceFilePath)
+        public bool CheckIsSourceFileRequireRegeneration(in Program.ConfigureData configureData, in string sourceFilePath)
         {
 
             //Stage 1 : If "~*.csv" file doesn't exist, Regenerate!
-            string csvFilePath = DirectoryHelper.GetclScanOutputPath(sourceFilePath);
+            string csvFilePath = DirectoryHelper.GetclScanOutputPath(configureData, sourceFilePath);
             if (File.Exists(csvFilePath) == false)
             {
                 return true; // Require regenerating reflection data file
@@ -22,8 +24,8 @@ namespace clReflect_automation
 
 
             //Stage 2 : If Source File's modified data is later than "~*.csv" file's modified date, Regenerate!
-            DateTime csvFileModified = FileModifiedDateManager.GetFileModifiedData(csvFilePath);
-            bool isSourceFileModified = FileModifiedDateManager.CheckIsFileModified(sourceFilePath, csvFileModified);
+            DateTime csvFileModified = mFileModifiedDateManager.GetFileModifiedData(csvFilePath);
+            bool isSourceFileModified = mFileModifiedDateManager.CheckIsFileModified(sourceFilePath, csvFileModified);
             if (isSourceFileModified == true)
             {
                 return true; // Require regenerating reflection data file
@@ -33,7 +35,7 @@ namespace clReflect_automation
             //Stage 3 : If Dependency File of source file doesn't exist
             //          or If Any Dependent file of source File's modified data is later than "~*.csv" file's modified date,
             //          Regenerate!
-            List<String> sourceFile_s_DependentFilePathList = SourceDependencyFileHelper.GetSourceFile_s_DependentFilePathList(sourceFilePath);
+            List<String> sourceFile_s_DependentFilePathList = mSourceDependencyFileHelper.GetSourceFile_s_DependentFilePathList(configureData, sourceFilePath);
             
             if (sourceFile_s_DependentFilePathList == null || sourceFile_s_DependentFilePathList.Count == 0)
             {
@@ -44,7 +46,7 @@ namespace clReflect_automation
             //If Any Dependent file of source File's modified data is later than "~*.csv" file's modified date,
             foreach (String dependenFilePath in sourceFile_s_DependentFilePathList)
             {
-                if(FileModifiedDateManager.CheckIsFileModified(dependenFilePath, csvFileModified) == true)
+                if(mFileModifiedDateManager.CheckIsFileModified(dependenFilePath, csvFileModified) == true)
                 {
                     return true;
                 }

@@ -9,19 +9,19 @@ namespace clReflect_automation
 {
     class DirectoryHelper
     {
-        public static string GetFileDirectoryInProjectFolder(in string filename)
+        public static string GetFileDirectoryInProjectFolder(in Program.ConfigureData configureData, in string filename)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
+            sb.Append(Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH));
             sb.Append('\\');
             sb.Append(filename);
             return sb.ToString();
         }
 
-        public static string GetFileDirectoryInProjectFolder(in StringBuilder filename)
+        public static string GetFileDirectoryInProjectFolder(in Program.ConfigureData configureData, in StringBuilder filename)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH));
+            sb.Append(Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH));
             sb.Append('\\');
             sb.Append(filename);
             return sb.ToString();
@@ -29,7 +29,7 @@ namespace clReflect_automation
 
         //
 
-        public static string ConvertPathMacros(in string macros)
+        public static string ConvertPathMacros(in Program.ConfigureData configureData, in string macros)
         {
             string targetString = "";
 
@@ -39,14 +39,14 @@ namespace clReflect_automation
 
                     string VcpkgInstalledDir_MacrosDetection_pattern = "<PropertyGroup Label=\"Vcpkg\" Condition=\"'\\$\\(Configuration\\)\\|\\$\\(Platform\\)\\'==\\'(.*?)\\|(.*?)'\\\">.*?\\<VcpkgInstalledDir\\>(.*?)<\\/VcpkgInstalledDir>.*?\\<\\/PropertyGroup\\>";
                     Regex VcpkgInstalledDir_rgx = new Regex(VcpkgInstalledDir_MacrosDetection_pattern, RegexOptions.Multiline | RegexOptions.Singleline);
-                    MatchCollection AdditionalPath_matches = VcpkgInstalledDir_rgx.Matches(Program.VCXPROJ_FILE_TEXT);
+                    MatchCollection AdditionalPath_matches = VcpkgInstalledDir_rgx.Matches(configureData.VCXPROJ_FILE_TEXT);
 
                     foreach (Match match in AdditionalPath_matches)
                     {
                         if (
-                           match.Groups[1].ToString() == Program.TARGET_CONFIGURATION
+                           match.Groups[1].ToString() == configureData.TARGET_CONFIGURATION
                            &&
-                           match.Groups[2].ToString() == Program.TARGET_PATFORM
+                           match.Groups[2].ToString() == configureData.TARGET_PATFORM
                        )
                         {
                             targetString = match.Groups[3].ToString();
@@ -57,13 +57,13 @@ namespace clReflect_automation
 
                 case "$(SolutionDir)":
                     //TODO : SolutionDirectory ( .sln direcoty ) can be different with ProjectDir ( .vcxproj ) 
-                    targetString = Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH);
+                    targetString = Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH);
 
                     break;
 
                 case "$(ProjectDir)":
 
-                    targetString = Path.GetDirectoryName(Program.VCXPROJ_FILE_PATH);
+                    targetString = Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH);
 
                     break;
 
@@ -81,48 +81,48 @@ namespace clReflect_automation
 
         }
 
-        public static string GetclMergeOutputPath()
+        public static string GetclMergeOutputPath(in Program.ConfigureData configureData)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Program.DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append(Program.ConfigureData.DEFAULT_CL_SCAN_OUT_FILE_NAME);
             sb.Append("_merged");
             sb.Append("_");
-            sb.Append(Program.TARGET_CONFIGURATION);
+            sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");
-            sb.Append(Program.TARGET_PATFORM);
+            sb.Append(configureData.TARGET_PATFORM);
             sb.Append(".csv");
 
-            string returnPath = GetFileDirectoryInProjectFolder(sb);
+            string returnPath = GetFileDirectoryInProjectFolder(configureData, sb);
 
             return returnPath;
         }
 
-        public static string GetclScanOutputPath(in string path)
+        public static string GetclScanOutputPath(in Program.ConfigureData configureData, in string path)
         {
             var sb = new System.Text.StringBuilder();
             sb.Append(Path.GetDirectoryName(path));
             sb.Append('\\');
             sb.Append(Path.GetFileNameWithoutExtension(path));
             sb.Append("_");
-            sb.Append(Program.TARGET_CONFIGURATION);
+            sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");
-            sb.Append(Program.TARGET_PATFORM);
+            sb.Append(configureData.TARGET_PATFORM);
             sb.Append(".csv");
 
             return sb.ToString();
         }
 
-        public static string GetclExportOutputPath()
+        public static string GetclExportOutputPath(in Program.ConfigureData configureData)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Program.DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append(Program.ConfigureData.DEFAULT_CL_SCAN_OUT_FILE_NAME);
             sb.Append("_");
-            sb.Append(Program.TARGET_CONFIGURATION);
+            sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");
-            sb.Append(Program.TARGET_PATFORM);
+            sb.Append(configureData.TARGET_PATFORM);
             sb.Append(".cppbin");
 
-            string returnPath = GetFileDirectoryInProjectFolder(sb);
+            string returnPath = GetFileDirectoryInProjectFolder(configureData, sb);
 
             return returnPath;
         }

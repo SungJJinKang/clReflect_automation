@@ -12,7 +12,7 @@ namespace clReflect_automation
     {
         
 
-        private static string ParseAdditionalPath(in string path)
+        private static string ParseAdditionalPath(in Program.ConfigureData configureData, in string path)
         {
             string AdditionalPath_MacrosDetection_pattern = @"\$\(.*\)";
             Regex AdditionalPath_rgx = new Regex(AdditionalPath_MacrosDetection_pattern, RegexOptions.Singleline);
@@ -24,13 +24,13 @@ namespace clReflect_automation
             }
             else
             {
-                string parsedAdditionalPath = path.Replace(AdditionalPath_match.Captures[0].ToString(), DirectoryHelper.ConvertPathMacros(AdditionalPath_match.Groups[0].ToString()) + '\\');
+                string parsedAdditionalPath = path.Replace(AdditionalPath_match.Captures[0].ToString(), DirectoryHelper.ConvertPathMacros(configureData, AdditionalPath_match.Groups[0].ToString()) + '\\');
                 return parsedAdditionalPath;
             }
           
         }
 
-        public static string GetAdditionalPaths()
+        public static string GetAdditionalPaths(in Program.ConfigureData configureData)
         {
 
 #if DEBUG
@@ -39,7 +39,7 @@ namespace clReflect_automation
 
             string ItemDefinitionGroup_pattern = @"<ItemDefinitionGroup(.*?)<\/ItemDefinitionGroup>";
             Regex ItemDefinitionGroup_rgx = new Regex(ItemDefinitionGroup_pattern, RegexOptions.Singleline);
-            MatchCollection ItemDefinitionGroup_matches = ItemDefinitionGroup_rgx.Matches(Program.VCXPROJ_FILE_TEXT);
+            MatchCollection ItemDefinitionGroup_matches = ItemDefinitionGroup_rgx.Matches(configureData.VCXPROJ_FILE_TEXT);
 
 
 
@@ -60,9 +60,9 @@ namespace clReflect_automation
                 }
 
                 if (
-                    configuration_platform_matches[0].Groups[1].ToString() == Program.TARGET_CONFIGURATION
+                    configuration_platform_matches[0].Groups[1].ToString() == configureData.TARGET_CONFIGURATION
                     &&
-                    configuration_platform_matches[0].Groups[2].ToString() == Program.TARGET_PATFORM
+                    configuration_platform_matches[0].Groups[2].ToString() == configureData.TARGET_PATFORM
                 )
                 {
                     isSuccessToFindValidConfigurationAndPlatform = true;
@@ -88,7 +88,7 @@ namespace clReflect_automation
                         if (addtionalPath != "")
                         {
                             sb.Append(@"-I");
-                            string parsedAdditionalPath = ParseAdditionalPath(addtionalPath);
+                            string parsedAdditionalPath = ParseAdditionalPath(configureData, addtionalPath);
                             sb.Append(parsedAdditionalPath);
                             sb.Append(@" ");
 
@@ -106,7 +106,7 @@ namespace clReflect_automation
 
             if(isSuccessToFindValidConfigurationAndPlatform == false)
             {
-                throw new Exception(String.Format("Fail to Find Correct Configuration ( {0} ) And Platform ( {1} )", Program.TARGET_CONFIGURATION, Program.TARGET_PATFORM));
+                throw new Exception(String.Format("Fail to Find Correct Configuration ( {0} ) And Platform ( {1} )", configureData.TARGET_CONFIGURATION, configureData.TARGET_PATFORM));
             }
 
             return resultStr;
