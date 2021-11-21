@@ -95,7 +95,7 @@ namespace clReflect_automation
             }
 
             stopWatch.Stop();
-            Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
+            Console.WriteLine("clExport takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
         }
 
         private string GetclMergeArguments(in Program.ConfigureData configureData, in List<string> clScanOutputFilePathes)
@@ -164,7 +164,7 @@ namespace clReflect_automation
             }
 
             stopWatch.Stop();
-            Console.WriteLine("clScan takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
+            Console.WriteLine("clMerge takes {0}m {1}s", stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds);
         }
 
         
