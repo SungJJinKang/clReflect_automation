@@ -62,7 +62,7 @@ namespace clReflect_automation
                 if (
                     configuration_platform_matches[0].Groups[1].ToString() == configureData.TARGET_CONFIGURATION
                     &&
-                    configuration_platform_matches[0].Groups[2].ToString() == configureData.TARGET_PATFORM
+                    configuration_platform_matches[0].Groups[2].ToString() == configureData.TARGET_PLATFORM
                 )
                 {
                     isSuccessToFindValidConfigurationAndPlatform = true;
@@ -106,7 +106,7 @@ namespace clReflect_automation
 
             if(isSuccessToFindValidConfigurationAndPlatform == false)
             {
-                throw new Exception(String.Format("Fail to Find Correct Configuration ( {0} ) And Platform ( {1} )", configureData.TARGET_CONFIGURATION, configureData.TARGET_PATFORM));
+                throw new Exception(String.Format("Fail to Find Correct Configuration ( {0} ) And Platform ( {1} )", configureData.TARGET_CONFIGURATION, configureData.TARGET_PLATFORM));
             }
 
             return resultStr;

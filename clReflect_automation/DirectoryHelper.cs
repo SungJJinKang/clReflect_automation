@@ -27,6 +27,22 @@ namespace clReflect_automation
             return sb.ToString();
         }
 
+        public static string GetFileDirectoryInProjectOutputDir(in Program.ConfigureData configureData, in StringBuilder filename)
+        {
+            // I know this is really poor.
+            // because you can change project output dir.
+            // but i can't find read project output direcotory from files in project folders
+            // check https://stackoverflow.com/questions/21007048/how-can-i-change-the-default-build-output-directory-in-visual-studio
+            var sb = new System.Text.StringBuilder();
+            sb.Append(Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH));
+            sb.Append('\\');
+            sb.Append(configureData.TARGET_PLATFORM);
+            sb.Append('\\');
+            sb.Append(configureData.TARGET_CONFIGURATION);
+            sb.Append('\\');
+            sb.Append(filename);
+            return sb.ToString();
+        }
         //
 
         public static string ConvertPathMacros(in Program.ConfigureData configureData, in string macros)
@@ -46,7 +62,7 @@ namespace clReflect_automation
                         if (
                            match.Groups[1].ToString() == configureData.TARGET_CONFIGURATION
                            &&
-                           match.Groups[2].ToString() == configureData.TARGET_PATFORM
+                           match.Groups[2].ToString() == configureData.TARGET_PLATFORM
                        )
                         {
                             targetString = match.Groups[3].ToString();
@@ -89,7 +105,7 @@ namespace clReflect_automation
             sb.Append("_");
             sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");
-            sb.Append(configureData.TARGET_PATFORM);
+            sb.Append(configureData.TARGET_PLATFORM);
             sb.Append(".csv");
 
             string returnPath = GetFileDirectoryInProjectFolder(configureData, sb);
@@ -106,7 +122,7 @@ namespace clReflect_automation
             sb.Append("_");
             sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");
-            sb.Append(configureData.TARGET_PATFORM);
+            sb.Append(configureData.TARGET_PLATFORM);
             sb.Append(".csv");
 
             return sb.ToString();
@@ -119,10 +135,10 @@ namespace clReflect_automation
             sb.Append("_");
             sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");
-            sb.Append(configureData.TARGET_PATFORM);
+            sb.Append(configureData.TARGET_PLATFORM);
             sb.Append(".cppbin");
 
-            string returnPath = GetFileDirectoryInProjectFolder(configureData, sb);
+            string returnPath = GetFileDirectoryInProjectOutputDir(configureData, sb);
 
             return returnPath;
         }

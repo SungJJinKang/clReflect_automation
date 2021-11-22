@@ -18,7 +18,7 @@ namespace clReflect_automation
 
             public string TARGET_CONFIGURATION;
 
-            public string TARGET_PATFORM;
+            public string TARGET_PLATFORM;
 
             public string CL_SCAN_FILE_PATH;
 
@@ -60,7 +60,7 @@ namespace clReflect_automation
 
             configureData.VCXPROJ_FILE_PATH = args[3].Trim();
             configureData.TARGET_CONFIGURATION = args[4].Trim();
-            configureData.TARGET_PATFORM = args[5].Trim();
+            configureData.TARGET_PLATFORM = args[5].Trim();
 
             for(int i = 0; i < args.Length; i++)
             {
@@ -89,7 +89,7 @@ namespace clReflect_automation
             }
 
             StringBuilder sb = new StringBuilder();
-            if (configureData.TARGET_PATFORM == "x64")
+            if (configureData.TARGET_PLATFORM == "x64")
             {
                 sb.Append("-D_WIN64 ");
                 sb.Append("-DLP64 ");
