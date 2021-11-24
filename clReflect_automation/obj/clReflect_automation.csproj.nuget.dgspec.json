@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj": {}
+    "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj": {}
   },
   "projects": {
-    "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj": {
+    "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+        "projectUniqueName": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
         "projectName": "clReflect_automation",
-        "projectPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+        "projectPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
         "packagesPath": "C:\\Users\\kmsjk\\.nuget\\packages\\",
-        "outputPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\DObject\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
+        "outputPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [

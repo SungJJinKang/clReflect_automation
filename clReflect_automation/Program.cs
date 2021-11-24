@@ -10,68 +10,66 @@ namespace clReflect_automation
 {
     class Program
     {
-        private static string __VCXPROJ_FILE_PATH;
-        public static string VCXPROJ_FILE_PATH { get { return __VCXPROJ_FILE_PATH; } }
-
-        private static string __VCXPROJ_FILE_TEXT;
-        public static string VCXPROJ_FILE_TEXT { get { return __VCXPROJ_FILE_TEXT; } }
-
-        private static string __TARGET_CONFIGURATION;
-        public static string TARGET_CONFIGURATION { get { return __TARGET_CONFIGURATION; } }
-
-        private static string __TARGET_PATFORM;
-        public static string TARGET_PATFORM { get { return __TARGET_PATFORM; } }
-
-        private static string __CL_SCAN_FILE_PATH;
-        public static string CL_SCAN_FILE_PATH { get { return __CL_SCAN_FILE_PATH; } }
-
-        private static string __CL_EXPORT_FILE_PATH;
-        public static string CL_EXPORT_FILE_PATH { get { return __CL_EXPORT_FILE_PATH; } }
-
-        private static string __CL_MERGE_FILE_PATH;
-        public static string CL_MERGE_FILE_PATH { get { return __CL_MERGE_FILE_PATH; } }
-
-        private static string __DEPENDENCY_FILES_FOLDER = "";
-        /// <summary>
-        /// end with '\\'
-        /// </summary>
-        public static string DEPENDENCY_FILES_FOLDER { get { return __DEPENDENCY_FILES_FOLDER; } }
-
-        private static string __ADDITIONAL_COMPILER_OPTION = "";
-        public static string ADDITIONAL_COMPILER_OPTION { get { return __ADDITIONAL_COMPILER_OPTION; } }
-
-
-        public static readonly string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
-
-        public static readonly string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
-
-        public static readonly string DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
-
-        private static readonly string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
-
-        static private void Configure(string[] args)
+        public struct ConfigureData
         {
-            Program.__CL_SCAN_FILE_PATH = args[0].Trim();
-            Console.WriteLine("CL_SCAN_FILE_PATH : {0}", Program.CL_SCAN_FILE_PATH);
+            public string VCXPROJ_FILE_PATH;
 
-            Program.__CL_MERGE_FILE_PATH = args[1].Trim();
-            Console.WriteLine("CL_MERGE_FILE_PATH : {0}", Program.CL_MERGE_FILE_PATH);
+            public string VCXPROJ_FILE_TEXT;
 
-            Program.__CL_EXPORT_FILE_PATH = args[2].Trim();
-            Console.WriteLine("CL_EXPORT_FILE_PATH : {0}", Program.CL_EXPORT_FILE_PATH);
+            public string TARGET_CONFIGURATION;
 
-            Program.__VCXPROJ_FILE_PATH = args[3].Trim();
-            Program.__TARGET_CONFIGURATION = args[4].Trim();
-            Program.__TARGET_PATFORM = args[5].Trim();
+            public string TARGET_PLATFORM;
+
+            public string CL_SCAN_FILE_PATH;
+
+            public string CL_EXPORT_FILE_PATH;
+
+            public string CL_MERGE_FILE_PATH;
+
+            /// <summary>
+            /// end with '\\'
+            /// </summary>
+            public string DEPENDENCY_FILES_FOLDER;
+
+            public string ADDITIONAL_COMPILER_OPTION;
+
+
+            public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
+
+            public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
+
+            public const string DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
+
+            public const string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
+
+            public string ROOTCLASS_TYPENAME;
+        }
+
+        
+
+        static private void Configure(ref ConfigureData configureData, string[] args)
+        {
+            configureData.CL_SCAN_FILE_PATH = args[0].Trim();
+            Console.WriteLine("CL_SCAN_FILE_PATH : {0}", configureData.CL_SCAN_FILE_PATH);
+
+            configureData.CL_MERGE_FILE_PATH = args[1].Trim();
+            Console.WriteLine("CL_MERGE_FILE_PATH : {0}", configureData.CL_MERGE_FILE_PATH);
+
+            configureData.CL_EXPORT_FILE_PATH = args[2].Trim();
+            Console.WriteLine("CL_EXPORT_FILE_PATH : {0}", configureData.CL_EXPORT_FILE_PATH);
+
+            configureData.VCXPROJ_FILE_PATH = args[3].Trim();
+            configureData.TARGET_CONFIGURATION = args[4].Trim();
+            configureData.TARGET_PLATFORM = args[5].Trim();
 
             for(int i = 0; i < args.Length; i++)
             {
                 if(args[i].StartsWith("-SD"))
                 {
-                    __DEPENDENCY_FILES_FOLDER = args[i].Substring(3);
-                    if(__DEPENDENCY_FILES_FOLDER.EndsWith("\\") == false)
+                    configureData.DEPENDENCY_FILES_FOLDER = args[i].Substring("-SD".Length);
+                    if (configureData.DEPENDENCY_FILES_FOLDER.EndsWith("\\") == false)
                     {
-                        __DEPENDENCY_FILES_FOLDER += "\\";
+                        configureData.DEPENDENCY_FILES_FOLDER += "\\";
                     }
 
                     args[i] = "";
@@ -79,11 +77,22 @@ namespace clReflect_automation
                 }
             }
 
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].StartsWith("-ROOTCLASS_TYPENAME"))
+                {
+                    configureData.ROOTCLASS_TYPENAME = args[i].Substring("-ROOTCLASS_TYPENAME".Length);
+
+                    args[i] = "";
+                    break;
+                }
+            }
+
             StringBuilder sb = new StringBuilder();
-            if (Program.TARGET_PATFORM == "x64")
+            if (configureData.TARGET_PLATFORM == "x64")
             {
                 sb.Append("-D_WIN64 ");
-                sb.Append("-D__LP64__ ");
+                sb.Append("-DLP64 ");
                 sb.Append("-m64 ");
             }
             else
@@ -98,9 +107,9 @@ namespace clReflect_automation
                     sb.Append(args[i] + ' ');
                 }
             }
-            Program.__ADDITIONAL_COMPILER_OPTION = sb.ToString().Trim();
+            configureData.ADDITIONAL_COMPILER_OPTION = sb.ToString().Trim();
 
-            Program.__VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(Program.VCXPROJ_FILE_PATH);
+            configureData.VCXPROJ_FILE_TEXT = System.IO.File.ReadAllText(configureData.VCXPROJ_FILE_PATH);
         }
 
         static private bool isInitialized = false;
@@ -125,34 +134,38 @@ namespace clReflect_automation
         {
             InitializeProgram();
 
+            ConfigureData configureData = new ConfigureData();
+
             try
             {
                 if (args.Length == 0 || args[0].Trim() == "")
                 {
-                    string setting_text_direcotry = Directory.GetCurrentDirectory() + "\\" + DEFAULT_SETTING_TEXT_FILENAME;
+                    string setting_text_direcotry = Directory.GetCurrentDirectory() + "\\" + ConfigureData.DEFAULT_SETTING_TEXT_FILENAME;
 
                     string setting_text_string = System.IO.File.ReadAllText(setting_text_direcotry);
                     string[] setting_text_args = setting_text_string.Split(' ');
-                    Configure(setting_text_args);
+                    Configure(ref configureData, setting_text_args);
                 }
                 else
                 {
-                    Configure(args);
+                    Configure(ref configureData, args);
                 }
 
-                List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories();
+                List<string> SourceFileDirectories = ParseSourceFileDirectories.GetSourceFileDirectories(configureData);
                
                 if(SourceFileDirectories.Count == 0)
                 {
                     return 0;
                 }
                 
-                string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths();
+                string additionalDirectories = ParseAdditionalDirectories.GetAdditionalPaths(configureData);
 
-                List<string> clScanOutFilePaths = clReflectCaller.clScanSourceFiles(SourceFileDirectories, additionalDirectories);
-                clReflectCaller.clMerge(clScanOutFilePaths);
+                clReflectCaller _clReflectCaller = new clReflectCaller();
 
-                clReflectCaller.clExport();
+                List<string> clScanOutFilePaths = _clReflectCaller.clScanSourceFiles(configureData, SourceFileDirectories, additionalDirectories);
+                _clReflectCaller.clMerge(configureData, clScanOutFilePaths);
+
+                _clReflectCaller.clExport(configureData);
 
                 return 0;
             }
@@ -182,6 +195,8 @@ namespace clReflect_automation
                 ExceptionHelper.ShowExceptionMessageBox(e);
                 result = 1;
             }
+
+            System.GC.Collect();
            
             return result;
         }

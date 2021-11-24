@@ -19,7 +19,7 @@ namespace clReflect_automation
         }
 
 
-        private static Dictionary<String, List<String>> SourceFile_s_DependentFilePathList_Cache = new Dictionary<string, List<string>>();
+        private Dictionary<String, List<String>> SourceFile_s_DependentFilePathList_Cache = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// return SourceFileDependencyFile Path
@@ -27,23 +27,27 @@ namespace clReflect_automation
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <returns></returns>
-        private static String ConvertSourceFilePathToSourceFileDependencyFile(in string sourceFilePath)
+        private String ConvertSourceFilePathToSourceFileDependencyFile(in Program.ConfigureData configureData, in string sourceFilePath)
         {
-            if(Program.DEPENDENCY_FILES_FOLDER.Length == 0 || Program.DEPENDENCY_FILES_FOLDER.Length == 1)
+            if(
+                configureData.DEPENDENCY_FILES_FOLDER == null || 
+                configureData.DEPENDENCY_FILES_FOLDER.Length == 0 || 
+                configureData.DEPENDENCY_FILES_FOLDER.Length == 1
+                )
             {
                 throw new Exception("DEPENDENCY_FILES_FOLDER is empty");
             }
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(Program.DEPENDENCY_FILES_FOLDER);
+            sb.Append(configureData.DEPENDENCY_FILES_FOLDER);
             sb.Append(Path.GetFileName(sourceFilePath));
             sb.Append(".json");
 
             return sb.ToString();
         }
 
-        public static eSourceDependencyFileType CheckSourceFileDependencyFileType(in string sourceFilePath)
+        public eSourceDependencyFileType CheckSourceFileDependencyFileType(in string sourceFilePath)
         {
             return eSourceDependencyFileType.VISUAL_STUDIO_SOURCE_DEPENDENCIES;
         }
@@ -55,7 +59,7 @@ namespace clReflect_automation
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <returns></returns>
-        private static List<String> GetDependentFilePathListFromDependencyFile(in string sourceFilePath)
+        private List<String> GetDependentFilePathListFromDependencyFile(in Program.ConfigureData configureData, in string sourceFilePath)
         {
             List<String> dependencyFilePathList = null;
 
@@ -65,7 +69,7 @@ namespace clReflect_automation
             {
                 case eSourceDependencyFileType.VISUAL_STUDIO_SOURCE_DEPENDENCIES:
 
-                    String SourceFileDependencyFilePath = ConvertSourceFilePathToSourceFileDependencyFile(sourceFilePath);
+                    String SourceFileDependencyFilePath = ConvertSourceFilePathToSourceFileDependencyFile(configureData, sourceFilePath);
 
                     if (File.Exists(SourceFileDependencyFilePath) == true) // This function is case - insensitive
                     {
@@ -92,13 +96,13 @@ namespace clReflect_automation
             return dependencyFilePathList;
         }
 
-        public static List<String> GetSourceFile_s_DependentFilePathList(in string sourceFilePath)
+        public List<String> GetSourceFile_s_DependentFilePathList(in Program.ConfigureData configureData, in string sourceFilePath)
         {
             List<String> sourceFile_s_DependentFilePathList = null;
 
             if (SourceFile_s_DependentFilePathList_Cache.ContainsKey(sourceFilePath) == false)
             {
-                sourceFile_s_DependentFilePathList = GetDependentFilePathListFromDependencyFile(sourceFilePath);
+                sourceFile_s_DependentFilePathList = GetDependentFilePathListFromDependencyFile(configureData, sourceFilePath);
 
                 SourceFile_s_DependentFilePathList_Cache.Add(sourceFilePath, sourceFile_s_DependentFilePathList);
             }
@@ -106,7 +110,7 @@ namespace clReflect_automation
             return sourceFile_s_DependentFilePathList;
         }
 
-        public static bool GetIsDependencyFolderEmpty(in eSourceDependencyFileType dependencyFileType)
+        public bool GetIsDependencyFolderEmpty(in Program.ConfigureData configureData, in eSourceDependencyFileType dependencyFileType)
         {
             bool isDependencyFolderEmpty = false;
 
@@ -114,7 +118,7 @@ namespace clReflect_automation
             {
                 case eSourceDependencyFileType.VISUAL_STUDIO_SOURCE_DEPENDENCIES:
 
-                    isDependencyFolderEmpty = Directory.GetFiles(Program.DEPENDENCY_FILES_FOLDER, "*.json", SearchOption.TopDirectoryOnly).Length > 0;
+                    isDependencyFolderEmpty = Directory.GetFiles(configureData.DEPENDENCY_FILES_FOLDER, "*.json", SearchOption.TopDirectoryOnly).Length > 0;
 
                     break;
 

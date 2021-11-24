@@ -68,9 +68,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\..\x64\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -91,6 +91,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -164,14 +167,14 @@
     <MSBuild BuildInParallel="true" UseResultsCache="true" Projects="$(MSBuildProjectFullPath)" Properties="DllExportRPkgDyn=true" Targets="Build" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y /d /f "$(ProjectDir)clexport.dll" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clmerge.dll" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clscan.dll" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clexport.map" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clmerge.map" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clscan.map" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clexport.pdb" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clmerge.pdb" "$(OutDir)"
-xcopy /y /d /f "$(ProjectDir)clscan.pdb" "$(OutDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y /d /f "$(ProjectDir)clexport.dll" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clmerge.dll" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clscan.dll" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clexport.map" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clmerge.map" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clscan.map" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clexport.pdb" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clmerge.pdb" "$(TargetDir)"
+xcopy /y /d /f "$(ProjectDir)clscan.pdb" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
