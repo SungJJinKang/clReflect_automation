@@ -103,7 +103,7 @@ namespace clReflect_automation
             var sb = new System.Text.StringBuilder();
             sb.Append(DirectoryHelper.GetclMergeOutputPath(configureData));
             sb.Append(" -cpp_codegen ");
-            sb.Append(DirectoryHelper.GetFileDirectoryInProjectFolder(configureData, Program.ConfigureData.DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME));
+            sb.Append(DirectoryHelper.GetFileDirectoryInProjectFolder(configureData, Program.ConfigureData.CL_COMPILETIME_GETTYPE_FILE_NAME));
             sb.Append(" ");
 
             for (int i = 0; i < clScanOutputFilePathes.Count; i++)

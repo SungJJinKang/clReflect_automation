@@ -100,7 +100,7 @@ namespace clReflect_automation
         public static string GetclMergeOutputPath(in Program.ConfigureData configureData)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Program.ConfigureData.DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append(configureData.CL_SCAN_OUT_FILE_NAME);
             sb.Append("_merged");
             sb.Append("_");
             sb.Append(configureData.TARGET_CONFIGURATION);
@@ -131,7 +131,7 @@ namespace clReflect_automation
         public static string GetclExportOutputPath(in Program.ConfigureData configureData)
         {
             var sb = new System.Text.StringBuilder();
-            sb.Append(Program.ConfigureData.DEFAULT_CL_SCAN_OUT_FILE_NAME);
+            sb.Append(configureData.CL_SCAN_OUT_FILE_NAME);
             sb.Append("_");
             sb.Append(configureData.TARGET_CONFIGURATION);
             sb.Append("_");

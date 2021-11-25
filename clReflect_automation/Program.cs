@@ -36,9 +36,10 @@ namespace clReflect_automation
 
             public const string DEFAULT_COMPILER_OPTION = "-D__clcpp_parse__ -w -W0 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS";
 
+            public string CL_SCAN_OUT_FILE_NAME;
             public const string DEFAULT_CL_SCAN_OUT_FILE_NAME = "clReflectCompialationData";
 
-            public const string DEFAULT_CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
+            public const string CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
 
             public const string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
 
@@ -86,6 +87,23 @@ namespace clReflect_automation
                     args[i] = "";
                     break;
                 }
+            }
+
+            bool is_Found_REFLECTION_BINARY_FILENAME = false;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i].StartsWith("-REFLECTION_BINARY_FILENAME"))
+                {
+                    configureData.CL_SCAN_OUT_FILE_NAME = args[i].Substring("-REFLECTION_BINARY_FILENAME".Length);
+
+                    is_Found_REFLECTION_BINARY_FILENAME = true;
+                    args[i] = "";
+                    break;
+                }
+            }
+            if(is_Found_REFLECTION_BINARY_FILENAME == false)
+            {
+                configureData.CL_SCAN_OUT_FILE_NAME = ConfigureData.DEFAULT_CL_SCAN_OUT_FILE_NAME;
             }
 
             StringBuilder sb = new StringBuilder();
