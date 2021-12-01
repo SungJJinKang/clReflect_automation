@@ -224,7 +224,11 @@ namespace clReflect_automation
         {
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
-
+            Console.Write("Arguments : ");
+            for (int i = 0; i < args.Length; i++)
+            {
+                Console.Write("{0} ", args[i]);
+            }
             try
             {
                 InitializeProgram();
