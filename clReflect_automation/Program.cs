@@ -41,7 +41,7 @@ namespace clReflect_automation
 
             public const string CL_COMPILETIME_GETTYPE_FILE_NAME = "clreflect_compiletime_gettype.cpp";
 
-            public const string DEFAULT_SETTING_TEXT_FILENAME = "Setting.txt";
+            public const string DEFAULT_SETTING_TEXT_FILENAME = "clreflect_automation_setting.txt";
 
             public string ROOTCLASS_TYPENAME;
         }
@@ -147,7 +147,6 @@ namespace clReflect_automation
             }
         }
 
-
         static private int Generate_clReflect_data(string[] args)
         {
             InitializeProgram();
@@ -219,6 +218,7 @@ namespace clReflect_automation
             return result;
         }
 
+      
 
         static void Main(string[] args)
         {
