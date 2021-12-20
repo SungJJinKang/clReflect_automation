@@ -180,6 +180,11 @@ namespace clReflect_automation
                 sb.Append(" --rootClass_typeName ");
                 sb.Append(configureData.ROOTCLASS_TYPENAME);
             }
+            if (configureData.VCXPROJ_FILE_PATH != null && configureData.VCXPROJ_FILE_PATH.Length > 0)
+            {
+                sb.Append(" --project_folder_path ");
+                sb.Append(Path.GetDirectoryName(configureData.VCXPROJ_FILE_PATH));
+            }
             sb.Append(" -- ");
             sb.Append(Program.ConfigureData.DEFAULT_COMPILER_OPTION);
             sb.Append(' ');
