@@ -2,7 +2,7 @@
 
 With this library, reflection datas of project's source files is generated automatically.       
 
-This library support using [clReflect](https://github.com/SungJJinKang/clReflect_automation) with Project Build File         
+This library support using [clReflect](https://github.com/SungJJinKang/clReflect_ForDoomsEngine) with Project Build File         
 
 1. Analyze Project Build file ( *.vcxproj.... )                
 2. Parse datas for generating reflection data ( addtional directories, compiler options... )              
