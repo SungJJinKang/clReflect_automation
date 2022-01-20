@@ -1,10 +1,13 @@
 # clReflect_VisualStudio
 
-This library support using [clReflect](https://github.com/SungJJinKang/clReflect_automation) with Project Build File         
+With this library, reflection datas of project's source files is generated automatically.       
 
-1. Analyze Project Build file ( CMakeLists.txt, *.vcxproj.... )
-2. Parse All Project source files ( *.cpp ) to Type info database file ( *.csv ) using clReflect with multiple threads ( stored at Project Build Folder )
-3. If source file requires regeneration of reflection fild ( when it or its dependency files is modified ), regenerate reflection file of the soruce file.
+This library support using [clReflect](https://github.com/SungJJinKang/clReflect_ForDoomsEngine) with Project Build File         
+
+1. Analyze Project Build file ( *.vcxproj.... ) and Parse Soucre Files Path.                    
+2. Parse datas for generating reflection data ( addtional directories, compiler options... )              
+3. Check if reflection data file of the source file is need to be regenerated ( Parse [json file](https://docs.microsoft.com/ko-kr/cpp/build/reference/sourcedependencies?view=msvc-170) containing dependency file list of source file, and compare its modified date with reflection file's )                 
+4. If the source file require to be regenerated, pass it to [clReflect](https://github.com/SungJJinKang/clReflect) with multiple threads           
 
 [Example Video](https://youtu.be/KGihaYTzqG8)                    
  
