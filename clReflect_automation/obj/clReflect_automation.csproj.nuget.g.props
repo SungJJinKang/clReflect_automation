@@ -7,15 +7,13 @@
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
     <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\kmsjk\.nuget\packages\</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">5.11.1</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.4.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\kmsjk\.nuget\packages\" />
   </ItemGroup>
-  <PropertyGroup>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgUnmanagedExports Condition=" '$(PkgUnmanagedExports)' == '' ">C:\Users\kmsjk\.nuget\packages\unmanagedexports\1.2.7</PkgUnmanagedExports>
     <PkgDllExport Condition=" '$(PkgDllExport)' == '' ">C:\Users\kmsjk\.nuget\packages\dllexport\1.7.4</PkgDllExport>
     <PkgConari Condition=" '$(PkgConari)' == '' ">C:\Users\kmsjk\.nuget\packages\conari\1.5.0</PkgConari>
   </PropertyGroup>

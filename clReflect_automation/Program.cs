@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using RGiesecke.DllExport;
 
 namespace clReflect_automation
 {

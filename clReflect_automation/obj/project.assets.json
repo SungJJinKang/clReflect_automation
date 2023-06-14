@@ -8,10 +8,14 @@
           "Microsoft.CSharp"
         ],
         "compile": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         }
       },
       "DllExport/1.7.4": {
@@ -23,13 +27,26 @@
           "lib/net20/_._": {}
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "UnmanagedExports/1.2.7": {
+        "type": "package",
+        "compile": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
+        },
+        "runtime": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
         }
       }
     },
@@ -40,10 +57,14 @@
           "Microsoft.CSharp"
         ],
         "compile": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         }
       },
       "DllExport/1.7.4": {
@@ -55,13 +76,26 @@
           "lib/net20/_._": {}
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "UnmanagedExports/1.2.7": {
+        "type": "package",
+        "compile": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
+        },
+        "runtime": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
         }
       }
     },
@@ -72,10 +106,14 @@
           "Microsoft.CSharp"
         ],
         "compile": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         }
       },
       "DllExport/1.7.4": {
@@ -87,13 +125,26 @@
           "lib/net20/_._": {}
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "UnmanagedExports/1.2.7": {
+        "type": "package",
+        "compile": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
+        },
+        "runtime": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
         }
       }
     },
@@ -104,10 +155,14 @@
           "Microsoft.CSharp"
         ],
         "compile": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net40/Conari.dll": {}
+          "lib/net40/Conari.dll": {
+            "related": ".xml"
+          }
         }
       },
       "DllExport/1.7.4": {
@@ -119,13 +174,26 @@
           "lib/net20/_._": {}
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {}
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "UnmanagedExports/1.2.7": {
+        "type": "package",
+        "compile": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
+        },
+        "runtime": {
+          "lib/net/RGiesecke.DllExport.Metadata.dll": {}
         }
       }
     }
@@ -227,14 +295,15 @@
         "tools/raw/lib/netstd/DllExport.xml"
       ]
     },
-    "Newtonsoft.Json/13.0.1": {
-      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
       "type": "package",
-      "path": "newtonsoft.json/13.0.1",
+      "path": "newtonsoft.json/13.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
+        "README.md",
         "lib/net20/Newtonsoft.Json.dll",
         "lib/net20/Newtonsoft.Json.xml",
         "lib/net35/Newtonsoft.Json.dll",
@@ -243,15 +312,40 @@
         "lib/net40/Newtonsoft.Json.xml",
         "lib/net45/Newtonsoft.Json.dll",
         "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
         "lib/netstandard1.0/Newtonsoft.Json.dll",
         "lib/netstandard1.0/Newtonsoft.Json.xml",
         "lib/netstandard1.3/Newtonsoft.Json.dll",
         "lib/netstandard1.3/Newtonsoft.Json.xml",
         "lib/netstandard2.0/Newtonsoft.Json.dll",
         "lib/netstandard2.0/Newtonsoft.Json.xml",
-        "newtonsoft.json.13.0.1.nupkg.sha512",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
+      ]
+    },
+    "UnmanagedExports/1.2.7": {
+      "sha512": "bPIbzFaAj4AFxjHGFGPrYnUSCyIWJMkT/LFuiphWdpUbO2L9fP68W/1SP9cHCAxgiekV+kFNbybA2VvRo8PYIQ==",
+      "type": "package",
+      "path": "unmanagedexports/1.2.7",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net/RGiesecke.DllExport.Metadata.dll",
+        "tools/DllExportCmdLets.psm1",
+        "tools/Mono.Cecil.dll",
+        "tools/RGiesecke.DllExport.MSBuild.dll",
+        "tools/RGiesecke.DllExport.MSBuild.pdb",
+        "tools/RGiesecke.DllExport.dll",
+        "tools/RGiesecke.DllExport.pdb",
+        "tools/RGiesecke.DllExport.targets",
+        "tools/init.ps1",
+        "tools/install.ps1",
+        "tools/uninstall.ps1",
+        "unmanagedexports.1.2.7.nupkg.sha512",
+        "unmanagedexports.nuspec"
       ]
     }
   },
@@ -259,7 +353,8 @@
     ".NETFramework,Version=v4.5": [
       "Conari >= 1.5.0",
       "DllExport >= 1.7.4",
-      "Newtonsoft.Json >= 13.0.1"
+      "Newtonsoft.Json >= 13.0.3",
+      "UnmanagedExports >= 1.2.7"
     ]
   },
   "packageFolders": {
@@ -268,11 +363,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+      "projectUniqueName": "C:\\새 폴더\\DoomsEngine\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
       "projectName": "clReflect_automation",
-      "projectPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
+      "projectPath": "C:\\새 폴더\\DoomsEngine\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\clReflect_automation.csproj",
       "packagesPath": "C:\\Users\\kmsjk\\.nuget\\packages\\",
-      "outputPath": "C:\\Doom3FromScratch\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
+      "outputPath": "C:\\새 폴더\\DoomsEngine\\Doom3\\Source\\Core\\Reflection\\clReflect_automation\\clReflect_automation\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [
@@ -299,13 +394,21 @@
             "target": "Package",
             "version": "[1.5.0, )"
           },
+          "Conari": {
+            "target": "Package",
+            "version": "[1.5.0, )"
+          },
           "DllExport": {
             "target": "Package",
             "version": "[1.7.4, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[13.0.1, )"
+            "version": "[13.0.3, )"
+          },
+          "UnmanagedExports": {
+            "target": "Package",
+            "version": "[1.2.7, )"
           }
         }
       }

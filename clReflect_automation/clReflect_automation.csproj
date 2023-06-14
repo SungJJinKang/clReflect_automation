@@ -128,11 +128,12 @@
     <PackageReference Include="Conari" Version="1.5.0" />
     <PackageReference Include="DllExport">
       <Version>1.7.4</Version>
-      <Visible>false</Visible>
-      <Wz>1</Wz>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="UnmanagedExports">
+      <Version>1.2.7</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
